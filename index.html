@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Letter</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=VT323&display=swap');
+:root{--bg:#0e0a1f;--bg2:#1b1030;--text:#ffffff;--muted:#c9c0e8;--primary:#8a7dff;--primary-hover:#7a6af0;--primary-text:#ffffff;--secondary-bg:#1a1330;--font-pixel:'Silkscreen','VT323',monospace}
+*{box-sizing:border-box;margin:0;padding:0;image-rendering:pixelated}
+html{-webkit-tap-highlight-color:transparent;image-rendering:pixelated}
+body{
+ min-height:100dvh;display:flex;align-items:center;justify-content:center;
+ background:linear-gradient(180deg,#1b1030 0%,#0e0a1f 55%,#070612 100%);
+ background-color:var(--bg);
+ font-family:var(--font-pixel);font-size:clamp(14px,4vw,16px);line-height:1.35;color:var(--text);
+ padding:calc(24px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom));
+ position:relative;overflow-x:hidden;transition:opacity .2s steps(4),transform .2s steps(4);touch-action:manipulation;
+ image-rendering:pixelated;letter-spacing:0.02em;
+}
+body.page-exit{opacity:0;transform:translateY(8px)}
+.clouds-layer{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.cloud{position:absolute;background:#FFFFFF;image-rendering:pixelated;box-shadow:0 4px 0 #ddd0ff;animation:cloudDrift 8s ease-in-out infinite alternate}
+.c1{left:6%;top:22%;width:12px;height:12px;box-shadow:12px 0 #FFFFFF,24px 0 #FFFFFF,36px 0 #FFFFFF,48px 0 #FFFFFF,60px 0 #FFFFFF,0 12px #FFFFFF,12px 12px #FFFFFF,24px 12px #FFFFFF,36px 12px #FFFFFF,48px 12px #FFFFFF,60px 12px #FFFFFF,12px 24px #ddd0ff,24px 24px #ddd0ff,36px 24px #ddd0ff,48px 24px #ddd0ff,12px -12px #FFFFFF,24px -12px #FFFFFF,36px -12px #FFFFFF}
+.c2{left:28%;top:14%;width:12px;height:8px;box-shadow:12px 0 #FFFFFF,24px 0 #FFFFFF,0 8px #FFFFFF,12px 8px #FFFFFF,24px 8px #FFFFFF,12px 16px #ddd0ff,24px 16px #ddd0ff,12px -8px #FFFFFF}
+.c3{left:52%;top:28%;width:12px;height:12px;box-shadow:12px 0 #FFFFFF,24px 0 #FFFFFF,36px 0 #FFFFFF,0 12px #FFFFFF,12px 12px #FFFFFF,24px 12px #FFFFFF,36px 12px #FFFFFF,12px 24px #ddd0ff,24px 24px #ddd0ff,36px 24px #ddd0ff,12px -12px #FFFFFF,24px -12px #FFFFFF}
+.c4{left:78%;top:18%;width:10px;height:10px;box-shadow:10px 0 #FFFFFF,20px 0 #FFFFFF,30px 0 #FFFFFF,0 10px #FFFFFF,10px 10px #FFFFFF,20px 10px #FFFFFF,30px 10px #FFFFFF,10px 20px #ddd0ff,20px 20px #ddd0ff,10px -10px #FFFFFF,20px -10px #FFFFFF}
+.c5{left:82%;top:42%;width:14px;height:10px;box-shadow:14px 0 #FFFFFF,0 10px #FFFFFF,14px 10px #FFFFFF,14px 20px #ddd0ff,7px -10px #FFFFFF}
+.c6{left:66%;top:48%;width:8px;height:8px;box-shadow:8px 0 #FFFFFF,16px 0 #FFFFFF,24px 0 #FFFFFF,0 8px #FFFFFF,8px 8px #FFFFFF,16px 8px #FFFFFF,24px 8px #FFFFFF,8px 16px #ddd0ff,16px 16px #ddd0ff,8px -8px #FFFFFF,16px -8px #FFFFFF}
+.c7{left:8%;top:62%;width:16px;height:14px;box-shadow:16px 0 #FFFFFF,32px 0 #FFFFFF,48px 0 #FFFFFF,0 14px #FFFFFF,16px 14px #FFFFFF,32px 14px #FFFFFF,48px 14px #FFFFFF,16px 28px #ddd0ff,32px 28px #ddd0ff,16px -14px #FFFFFF,32px -14px #FFFFFF}
+@keyframes cloudDrift{0%{transform:translateX(0)}100%{transform:translateX(8px)}}
+.hearts-layer{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.hearts-layer span{position:absolute;bottom:-20px;user-select:none;animation:floatUp linear infinite;will-change:transform,opacity}
+@keyframes floatUp{0%{transform:translateY(110vh) rotate(var(--rot-start)) scale(0.9);opacity:0}12%{opacity:0.55}55%{opacity:0.5}88%{opacity:0.5}100%{transform:translateY(-15vh) rotate(var(--rot-end)) scale(1.05);opacity:0}}
+.wrap{width:100%;max-width:420px;display:flex;flex-direction:column;align-items:center;position:relative;z-index:2;min-height:100vh;justify-content:flex-start;padding-top:12vh;gap:0;text-align:center}
+.gif-wrap{width:100%;max-width:280px;overflow:hidden;background:var(--bg2);border:3px solid #1b1030;box-shadow:2px 2px 0 #1b1030;line-height:0;margin-bottom:18px}
+.gif-wrap img{width:100%;height:auto;display:block;aspect-ratio:1.4/1;object-fit:cover;image-rendering:pixelated}
+h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spacing:0.01em;color:#ffffff;font-family:var(--font-pixel);image-rendering:pixelated;text-wrap:balance;text-align:center;max-width:320px;text-shadow:0 1px 6px rgba(14,10,31,0.5)}
+.subtitle{font-size:clamp(11px,3.2vw,13px);color:#c9c0e8;opacity:0.85;letter-spacing:0.01em;line-height:1.4;font-family:var(--font-pixel);text-align:center;margin-top:8px;max-width:320px}
+.actions{display:flex;gap:12px;justify-content:center;align-items:center;width:100%;padding-top:16px}
+.btn{width:120px;height:44px;border-radius:0;font-size:clamp(12px,3.2vw,14px);font-family:var(--font-pixel);font-weight:400;cursor:pointer;border:3px solid #1b1030;display:inline-flex;align-items:center;justify-content:center;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation;transition:transform .08s steps(2),box-shadow .08s steps(2);flex-shrink:0;box-shadow:2px 2px 0 #1b1030;line-height:1.2;text-align:center;image-rendering:pixelated;letter-spacing:0.01em}
+#yesBtn{background:var(--primary);color:var(--primary-text);box-shadow:2px 2px 0 #1b1030}
+#yesBtn:hover{background:var(--primary-hover);transform:translate(1px,1px);box-shadow:1px 1px 0 #1b1030}
+#yesBtn:active{transform:translate(2px,2px);box-shadow:none}
+#noBtn{width:120px;height:44px;background:var(--secondary-bg);color:#ffffff;border-color:#1b1030;box-shadow:2px 2px 0 #1b1030}
+#noBtn:hover{border-color:#1b1030;transform:translate(1px,1px);box-shadow:1px 1px 0 #1b1030}
+#noBtn:active{transform:translate(2px,2px);box-shadow:none}
+@keyframes wobble{0%{transform:rotate(0)}25%{transform:rotate(-1deg)}50%{transform:rotate(1deg)}75%{transform:rotate(-1deg)}100%{transform:rotate(0)}}
+.wobble{animation:wobble .35s steps(4)}
+@keyframes popIn{0%{transform:translate(-50%,-50%) scale(.85);opacity:0}100%{transform:translate(-50%,-50%) scale(1);opacity:1}}
+.extra-yes{position:fixed;z-index:45;background:var(--primary);color:var(--primary-text);border:3px solid #1b1030;box-shadow:2px 2px 0 #1b1030;transform:translate(-50%,-50%);animation:popIn .2s steps(4) forwards;font-family:var(--font-pixel);font-size:8px;border-radius:0;image-rendering:pixelated}
+.extra-yes:hover{background:var(--primary-hover);transform:translate(calc(-50% + 1px),calc(-50% + 1px));box-shadow:1px 1px 0 #1b1030}
+.extra-yes:active{transform:translate(calc(-50% + 2px),calc(-50% + 2px));box-shadow:none}
+.toast{position:fixed;bottom:calc(24px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%) translateY(10px);background:#1b1030;color:#fff;padding:8px 12px;border:3px solid #1b1030;box-shadow:2px 2px 0 rgba(0,0,0,0.4);font-family:var(--font-pixel);font-size:8px;opacity:0;pointer-events:none;transition:opacity .15s steps(4),transform .15s steps(4);white-space:nowrap;z-index:40;image-rendering:pixelated}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.overlay{position:fixed;inset:0;background:rgba(14,10,31,0.72);display:flex;align-items:center;justify-content:center;padding:24px 16px;padding-top:calc(24px + env(safe-area-inset-top));padding-bottom:calc(24px + env(safe-area-inset-bottom));opacity:0;pointer-events:none;transition:opacity .2s steps(4);z-index:100}
+.overlay.open{opacity:1;pointer-events:auto}
+.overlay-card{position:relative;z-index:101;background:#ffffff;border:4px solid #1b1030;box-shadow:4px 4px 0 #1b1030;padding:24px 20px;max-width:420px;width:100%;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;transform:scale(.96);opacity:0;transition:transform .2s steps(4),opacity .2s steps(4);image-rendering:pixelated}
+.overlay.open .overlay-card{transform:scale(1);opacity:1}
+.overlay-card h2{font-size:clamp(13px,3.5vw,15px);font-weight:400;letter-spacing:0.01em;line-height:1.4;font-family:var(--font-pixel);color:#1e1433}
+.overlay-card p{color:#6b6a84;font-size:clamp(10px,2.8vw,12px);line-height:1.4;font-family:var(--font-pixel)}
+.overlay-card .btn{margin-top:4px}
+.overlay-close{position:absolute;top:6px;right:6px;width:20px;height:20px;background:#1b1030;color:#fff;border:2px solid #1b1030;display:flex;align-items:center;justify-content:center;font-family:var(--font-pixel);font-size:10px;cursor:pointer;line-height:1;box-shadow:1px 1px 0 #1b1030}
+.overlay-close:hover{transform:translate(1px,1px);box-shadow:none}
+#confettiCanvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:99;display:none;image-rendering:pixelated}
+#confettiCanvas.active{display:block}
+@media (max-width:430px){.wrap{padding-top:8vh}}
+.btn:focus-visible{outline:2px solid #a9c6ff;outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="clouds-layer" aria-hidden="true"><div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div><div class="cloud c4"></div><div class="cloud c5"></div><div class="cloud c6"></div><div class="cloud c7"></div></div>
+<div class="hearts-layer" aria-hidden="true" id="heartsLayer"></div>
+<div class="wrap">
+  <div class="gif-wrap">
+    <img src="https://media.giphy.com/media/3o7abKhOpu0NwenHRC/giphy.gif" alt="cute gif" id="topGif">
+  </div>
+  <h1>Do you actually like me?</h1>
+  <p class="subtitle">No pressure -- your answer is safe with me</p>
+  <div class="actions">
+    <button id="yesBtn" class="btn" type="button" aria-label="Yes">Yes</button>
+    <button id="noBtn" class="btn" type="button" aria-label="No">No</button>
+  </div>
+</div>
+<div id="overlay" class="overlay" role="dialog" aria-modal="true" aria-label="Success">
+  <div class="overlay-card">
+    <button class="overlay-close" id="overlayX" aria-label="Close">X</button>
+    <div style="font-size:22px;line-height:1;image-rendering:pixelated">♥</div>
+    <h2>Yay! You made my day</h2>
+    <p>I knew you would say yes! Can't wait for what is next.</p>
+    <button id="closeOverlay" class="btn" type="button" aria-label="Continue to next page" style="background:var(--primary);color:var(--primary-text);">Continue -></button>
+  </div>
+</div>
+<canvas id="confettiCanvas"></canvas>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+  const yesBtn=document.getElementById('yesBtn');
+  const noBtn=document.getElementById('noBtn');
+  const overlay=document.getElementById('overlay');
+  const closeOverlay=document.getElementById('closeOverlay');
+  const overlayX=document.getElementById('overlayX');
+  const toast=document.getElementById('toast');
+  const canvas=document.getElementById('confettiCanvas');
+  const heartsLayer=document.getElementById('heartsLayer');
+  const heartsColors=['#ffffff','#ffffff','#a9c6ff','#d7cfff','#8a7dff'];
+  const heartsChars=['\u2665','\u2764'];
+  const heartsCount=16;
+  for(let i=0;i<heartsCount;i++){const el=document.createElement('span');el.textContent=heartsChars[Math.floor(Math.random()*heartsChars.length)];const size=(16+Math.random()*12).toFixed(1);el.style.fontSize=size+'px';el.style.left=(Math.random()*100).toFixed(2)+'%';el.style.color=heartsColors[Math.floor(Math.random()*heartsColors.length)];el.style.opacity=(0.60+Math.random()*0.15).toFixed(2);const dur=(10+Math.random()*6).toFixed(2);el.style.animationDuration=dur+'s';el.style.animationDelay=(Math.random()*8).toFixed(2)+'s';const rotStart=(-18+Math.random()*10).toFixed(1)+'deg';const rotEnd=(8+Math.random()*14).toFixed(1)+'deg';el.style.setProperty('--rot-start',rotStart);el.style.setProperty('--rot-end',rotEnd);heartsLayer.appendChild(el);}
+  const noTexts=["No","Are you sure?","Really sure?","Think again? \uD83E\uDD14","Are you really sure??","Maybe? \uD83D\uDC40","Maybe later?","Maybe...?","Hmm... \uD83E\uDD28","Not sure? \uD83D\uDE0F","U sure? \uD83E\uDD7A","Please? \uD83D\uDE4F","Give Yes a chance? \uD83D\uDE0A","Don't do this to me \uD83D\uDE22","Last chance! \uD83D\uDE2C","Think twice! \uD83D\uDCAD","Surely Maybe? \uD83D\uDE09","Yes is waiting... \u2764\uFE0F","Maaaaybe? \uD83E\uDD79","Okay, maybe another time..."];
+  let noIndex=0, noClickCount=0, totalSpawned=0;
+  const spawnedPositions=[];
+  const yesTexts=["Yes","Yes \u2764\uFE0F","Yes!!","Of course!","Absolutely","Yesss!","Sure!","Yess!! \u2764\uFE0F","Definitely!","Yes yes!","Okay! \u2764\uFE0F","Yup!"];
+  function showToast(msg){toast.textContent=msg;toast.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(()=>toast.classList.remove('show'),1800);}
+  function getNoText(idx){return noTexts[idx%noTexts.length];}
+  noBtn.addEventListener('click',function(e){
+    e.preventDefault();noIndex++;const nextText=getNoText(noIndex);noBtn.textContent=nextText;showToast(nextText);
+    const vw=window.innerWidth,vh=window.innerHeight;
+    for(let i=0;i<3;i++){
+      let s,x,y,fx,fy;let lastCandidate=null;let placed=false;
+      for(let attempt=0;attempt<10;attempt++){
+        s=85+(Math.random()+Math.random()+Math.random()-1.5)*24;s=Math.max(62,Math.min(118,s));
+        const buttonWidth=Math.round(s);const buttonHeight=Math.round(36+s*0.12);
+        x=Math.random()*(vw-buttonWidth-16)+8;y=Math.random()*(vh-buttonHeight-16)+8;fx=x+buttonWidth/2;fy=y+buttonHeight/2;
+        lastCandidate={x:fx,y:fy,s:s,w:buttonWidth,h:buttonHeight,bx:x,by:y};
+        let ok=true;for(const p of spawnedPositions){const dx=fx-p.x,dy=fy-p.y,dist=Math.hypot(dx,dy);const candMax=Math.max(buttonWidth,buttonHeight),existMax=Math.max(p.w,p.h),minDist=(candMax+existMax)/2*0.75;if(dist<minDist){ok=false;break;}}
+        if(ok){placed=true;break;}
+      }
+      if(!placed&&lastCandidate){s=lastCandidate.s;x=lastCandidate.bx;y=lastCandidate.by;fx=lastCandidate.x;fy=lastCandidate.y;}
+      const buttonWidth=Math.round(s),buttonHeight=Math.round(36+s*0.12);
+      spawnedPositions.push({x:fx,y:fy,w:buttonWidth,h:buttonHeight,s:s});totalSpawned++;
+      const btn=document.createElement('button');btn.className='btn extra-yes';btn.type='button';btn.setAttribute('aria-label','Yes');btn.textContent=yesTexts[Math.floor(Math.random()*yesTexts.length)];
+       btn.style.left=fx+'px';btn.style.top=fy+'px';let z=Math.min(45+totalSpawned,60);btn.style.zIndex=String(z);btn.style.width=buttonWidth+'px';btn.style.height=buttonHeight+'px';
+      const fsRaw=buttonHeight*0.42/16,fs=Math.max(0.55,Math.min(0.85,fsRaw));btn.style.fontSize=fs.toFixed(2)+'rem';
+      const rot=(Math.random()*6-3);btn.style.transform='translate(-50%, -50%) rotate('+rot.toFixed(1)+'deg)';
+      btn.addEventListener('click',openSuccess);document.body.appendChild(btn);
+    }
+    noClickCount++;noBtn.style.transition='transform .08s steps(2)';noBtn.style.transform='scale(0.95)';setTimeout(()=>{noBtn.style.transform='';},150);
+  });
+  noBtn.addEventListener('touchstart',function(){noBtn.classList.remove('wobble');void noBtn.offsetWidth;noBtn.classList.add('wobble');setTimeout(()=>noBtn.classList.remove('wobble'),500);},{passive:true});
+  let confettiRAF=null,particles=[];
+  function drawStar(ctx,r){ctx.beginPath();for(let i=0;i<5;i++){const a1=(Math.PI*2*i/5)-Math.PI/2,a2=a1+Math.PI/5;if(i===0)ctx.moveTo(Math.cos(a1)*r,Math.sin(a1)*r);else ctx.lineTo(Math.cos(a1)*r,Math.sin(a1)*r);ctx.lineTo(Math.cos(a2)*r*0.45,Math.sin(a2)*r*0.45);}ctx.closePath();ctx.fill();}
+  function launchConfetti(){
+    const ctx=canvas.getContext('2d');if(!ctx)return;canvas.classList.add('active');
+    function resize(){canvas.width=innerWidth*devicePixelRatio;canvas.height=innerHeight*devicePixelRatio;canvas.style.width=innerWidth+'px';canvas.style.height=innerHeight+'px';ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);}
+    resize();
+    const colors=['#8a7dff','#a9c6ff','#b5aaff','#ffc2d1','#ffb703','#4cc9f0','#b5e48c','#ff8fa3'];
+    const count=160;particles=[];
+    for(let i=0;i<count;i++){const r=Math.random();let shape=r<0.33?'circle':r<0.66?'rect':'star';particles.push({x:innerWidth/2+(Math.random()-0.5)*120,y:innerHeight/2+(Math.random()-0.5)*40,vx:(Math.random()-0.5)*16,vy:-Math.random()*10-4,r:Math.random()*6+4,rot:Math.random()*Math.PI*2,vr:(Math.random()-0.5)*0.35,color:colors[Math.floor(Math.random()*colors.length)],shape:shape,drift:(Math.random()-0.5)*0.6,life:1});}
+    let start=performance.now();const duration=3200;
+    function frame(now){
+      const elapsed=now-start,progress=elapsed/duration;ctx.clearRect(0,0,innerWidth,innerHeight);
+      let alive=0;for(const p of particles){p.x+=p.vx+Math.sin(elapsed*0.002+p.r)*p.drift;p.y+=p.vy;p.vy+=0.38;p.vx*=0.995;p.rot+=p.vr;p.life=1-progress;if(p.y<innerHeight+20&&p.life>0){alive++;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.globalAlpha=Math.max(0,1-progress*0.9);ctx.fillStyle=p.color;if(p.shape==='rect')ctx.fillRect(-p.r/2,-p.r*0.35,p.r,p.r*0.7);else if(p.shape==='circle'){ctx.beginPath();ctx.arc(0,0,p.r*0.45,0,Math.PI*2);ctx.fill();}else drawStar(ctx,p.r*0.5);ctx.restore();}}
+      if(progress<1&&alive>0)confettiRAF=requestAnimationFrame(frame);else{ctx.clearRect(0,0,innerWidth,innerHeight);setTimeout(()=>canvas.classList.remove('active'),400);}
+    }
+    if(confettiRAF)cancelAnimationFrame(confettiRAF);confettiRAF=requestAnimationFrame(frame);
+  }
+  function openSuccess(){overlay.classList.add('open');launchConfetti();}
+  yesBtn.addEventListener('click',openSuccess);
+  closeOverlay.addEventListener('click',()=>{document.body.classList.add('page-exit');setTimeout(()=>{location.href='page2.html';},450);});
+  if(overlayX)overlayX.addEventListener('click',()=>overlay.classList.remove('open'));
+  overlay.addEventListener('click',(e)=>{if(e.target===overlay)overlay.classList.remove('open');});
+  document.addEventListener('keydown',(e)=>{if(e.key==='Escape')overlay.classList.remove('open');});
+})();
+</script>
+</body>
+</html>
