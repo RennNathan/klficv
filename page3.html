@@ -177,29 +177,29 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){overlay.cla
 <script id="spa-nav">
 function spaGo(url){
   const keepBg=document.getElementById('bgMusic');
+  const keepBtn=document.getElementById('soundBtn');
+  const keepHint=document.getElementById('musicHint');
   fetch(url).then(r=>r.text()).then(html=>{
     const d=new DOMParser().parseFromString(html,'text/html');
-    const dup=d.getElementById('bgMusic'); if(dup) dup.remove();
     d.querySelectorAll('style,link[rel="stylesheet"]').forEach(function(n){
       var href=n.getAttribute('href');
       if(n.tagName==='LINK' && href && document.querySelector('link[href="'+href+'"]')) return;
       document.head.appendChild(n.cloneNode(true));
     });
-    document.body.innerHTML=d.body.innerHTML;
+    d.querySelectorAll('#bgMusic,#soundBtn,#musicHint').forEach(function(el){el.remove();});
+    document.body.innerHTML='';
     if(keepBg) document.body.appendChild(keepBg);
+    if(keepBtn) document.body.appendChild(keepBtn);
+    if(keepHint) document.body.appendChild(keepHint);
+    d.body.childNodes.forEach(function(n){document.body.appendChild(n.cloneNode(true));});
     history.pushState(null,'',url);
-    d.querySelectorAll('script').forEach(s=>{
-      if(s.id==='spa-nav') return;
-      if(s.src){var ns=document.createElement('script');ns.src=s.src;document.body.appendChild(ns);}
-      else{try{eval(s.textContent)}catch(e){console.log('[spa] eval fail',e)}}
-    });
     requestAnimationFrame(function(){requestAnimationFrame(function(){
       document.querySelectorAll('.cloud').forEach(function(c){c.classList.add('cloud-enter');c.style.transform='translateX(0)';});
       var w=document.querySelector('.wrap'); if(w) w.classList.add('page-in');
     });});
-  }).catch(()=>{location.href=url});
-}
-window.addEventListener('popstate',()=>{location.reload();});
+    try{var bg=document.getElementById('bgMusic');if(bg&&!bg.paused&&bg.play){bg.play().catch(function(){});}}catch(e){}
+  }).catch(function(){location.href=url});
+},()=>{location.reload();});
 </script>
 
 </body>

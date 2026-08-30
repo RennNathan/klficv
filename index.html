@@ -78,14 +78,14 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
 </style>
 </head>
 <body>
-<audio id="bgMusic" src="assets/silly-cat.mp3" loop autoplay preload="auto" style="display:none"></audio>
+<audio id="bgMusic" src="assets/silly-cat.mp3" loop preload="auto" style="display:none"></audio>
 <button id="soundBtn" style="position:fixed;bottom:12px;left:12px;z-index:99;font-family:var(--font-pixel);font-size:10px;padding:6px 10px;border:2px solid #1b1030;box-shadow:2px 2px 0 #1b1030;background:#fff">🔊 Sound ON</button>
 <div id="musicHint" class="music-hint">tap 🔊 to turn on music</div>
 <div class="clouds-layer" aria-hidden="true"><div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div><div class="cloud c4"></div><div class="cloud c5"></div><div class="cloud c6"></div><div class="cloud c7"></div></div>
 <div class="hearts-layer" aria-hidden="true" id="heartsLayer"></div>
 <div class="wrap">
   <img src="assets/nervous.gif" alt="nervous" id="mainGif" style="max-width:280px;width:min(280px,80vw);display:block;margin:0 auto 18px;image-rendering:auto;border:3px solid #1b1030;box-shadow:2px 2px 0 #1b1030">
-  <h1>Do u actually like me?</h1>
+  <h1>Can I court u?</h1>
   <img src="assets/plead.gif" id="pleadGif" style="width:80px;display:block;margin:14px auto 6px;mix-blend-mode:lighten;pointer-events:none">
   <div class="actions">
     <button id="yesBtn" class="btn" type="button" aria-label="Yes">Yada</button>
@@ -133,7 +133,7 @@ return tryPlay;}const bgTryPlay=initBg();
   const heartsChars=['\u2665','\u2764'];
   const heartsCount=16;
   for(let i=0;i<heartsCount;i++){const el=document.createElement('span');el.textContent=heartsChars[Math.floor(Math.random()*heartsChars.length)];const size=(16+Math.random()*12).toFixed(1);el.style.fontSize=size+'px';el.style.left=(Math.random()*100).toFixed(2)+'%';el.style.color=heartsColors[Math.floor(Math.random()*heartsColors.length)];el.style.opacity=(0.60+Math.random()*0.15).toFixed(2);let dur=10+Math.random()*6;let delay=-(Math.random()*dur);el.style.animationDuration=dur.toFixed(2)+'s';el.style.animationDelay=delay.toFixed(2)+'s';const rotStart=(-18+Math.random()*10).toFixed(1)+'deg';const rotEnd=(8+Math.random()*14).toFixed(1)+'deg';el.style.setProperty('--rot-start',rotStart);el.style.setProperty('--rot-end',rotEnd);heartsLayer.appendChild(el);}
-   const noTexts=["Nada","Sure na?","Weeh??","Are u lying?","Totoo na ba 'yan?","☹️"];
+   const noTexts=["Nada","No? edi dont","Sure na?","Weeh??","Are u lying?","Totoo na ba 'yan?","☹️"];
    let noIndex=0, noClickCount=0, totalSpawned=0;
   const spawnedPositions=[];
    const yesTexts=["Yada","Yup","Yis","Yes","Absutuliti"];
@@ -195,29 +195,29 @@ return tryPlay;}const bgTryPlay=initBg();
 <script id="spa-nav">
 function spaGo(url){
   const keepBg=document.getElementById('bgMusic');
+  const keepBtn=document.getElementById('soundBtn');
+  const keepHint=document.getElementById('musicHint');
   fetch(url).then(r=>r.text()).then(html=>{
     const d=new DOMParser().parseFromString(html,'text/html');
-    const dup=d.getElementById('bgMusic'); if(dup) dup.remove();
     d.querySelectorAll('style,link[rel="stylesheet"]').forEach(function(n){
       var href=n.getAttribute('href');
       if(n.tagName==='LINK' && href && document.querySelector('link[href="'+href+'"]')) return;
       document.head.appendChild(n.cloneNode(true));
     });
-    document.body.innerHTML=d.body.innerHTML;
+    d.querySelectorAll('#bgMusic,#soundBtn,#musicHint').forEach(function(el){el.remove();});
+    document.body.innerHTML='';
     if(keepBg) document.body.appendChild(keepBg);
+    if(keepBtn) document.body.appendChild(keepBtn);
+    if(keepHint) document.body.appendChild(keepHint);
+    d.body.childNodes.forEach(function(n){document.body.appendChild(n.cloneNode(true));});
     history.pushState(null,'',url);
-    d.querySelectorAll('script').forEach(s=>{
-      if(s.id==='spa-nav') return;
-      if(s.src){var ns=document.createElement('script');ns.src=s.src;document.body.appendChild(ns);}
-      else{try{eval(s.textContent)}catch(e){console.log('[spa] eval fail',e)}}
-    });
     requestAnimationFrame(function(){requestAnimationFrame(function(){
       document.querySelectorAll('.cloud').forEach(function(c){c.classList.add('cloud-enter');c.style.transform='translateX(0)';});
       var w=document.querySelector('.wrap'); if(w) w.classList.add('page-in');
     });});
-  }).catch(()=>{location.href=url});
-}
-window.addEventListener('popstate',()=>{location.reload();});
+    try{var bg=document.getElementById('bgMusic');if(bg&&!bg.paused&&bg.play){bg.play().catch(function(){});}}catch(e){}
+  }).catch(function(){location.href=url});
+},()=>{location.reload();});
 </script>
 
 </body>
