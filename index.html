@@ -74,6 +74,7 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
 </style>
 </head>
 <body>
+<audio id="bgMusic" src="assets/silly-cat.mp3" loop preload="auto" style="display:none"></audio>
 <div class="clouds-layer" aria-hidden="true"><div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div><div class="cloud c4"></div><div class="cloud c5"></div><div class="cloud c6"></div><div class="cloud c7"></div></div>
 <div class="hearts-layer" aria-hidden="true" id="heartsLayer"></div>
 <div class="wrap">
@@ -98,6 +99,7 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){
+  function initBg(){const bg=document.getElementById('bgMusic');if(!bg)return()=>{};bg.volume=0.35;bg.loop=true;const saved=sessionStorage.getItem('bgTime');if(saved)try{bg.currentTime=parseFloat(saved);}catch(e){}const wasPlaying=sessionStorage.getItem('bgPlaying')==='1';if(wasPlaying)bg.play().catch(()=>{});function tryPlay(){if(bg.paused)bg.play().then(()=>sessionStorage.setItem('bgPlaying','1')).catch(()=>{});}document.addEventListener('click',tryPlay,{once:true});document.addEventListener('touchstart',tryPlay,{once:true});setInterval(()=>{if(!bg.paused)sessionStorage.setItem('bgTime',bg.currentTime)},500);window.addEventListener('beforeunload',()=>{sessionStorage.setItem('bgTime',bg.currentTime);sessionStorage.setItem('bgPlaying',bg.paused?'0':'1');});document.addEventListener('visibilitychange',()=>{if(!document.hidden&&sessionStorage.getItem('bgPlaying')==='1'&&bg.paused)bg.play().catch(()=>{});});return tryPlay;}const bgTryPlay=initBg();
   const yesBtn=document.getElementById('yesBtn');
   const noBtn=document.getElementById('noBtn');
   const overlay=document.getElementById('overlay');
@@ -165,9 +167,9 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
     }
     if(confettiRAF)cancelAnimationFrame(confettiRAF);confettiRAF=requestAnimationFrame(frame);
   }
-    function openSuccess(){try{let yippee=new Audio('assets/yippee-tbh.mp3');yippee.volume=0.6;yippee.currentTime=0;yippee.play().catch(function(){});}catch(e){}launchConfetti();document.querySelectorAll('.cloud').forEach(function(c){var r=c.getBoundingClientRect();var isLeft=r.left+r.width/2 < window.innerWidth/2;c.style.animation='none';c.classList.add('cloud-exit');c.style.transition='transform 0.6s ease-in';void c.offsetWidth;c.style.transform=isLeft?'translateX(-120vw)':'translateX(120vw)';});var w=document.querySelector('.wrap');if(w){w.classList.add('content-exit');w.style.opacity='0';w.style.transform='translateY(14px)';w.style.transition='opacity 0.45s ease,transform 0.45s ease';}setTimeout(function(){location.href='page2.html';},650);}
+    function openSuccess(){try{bgTryPlay();}catch(e){}try{let yippee=new Audio('assets/yippee-tbh.mp3');yippee.volume=0.6;yippee.currentTime=0;yippee.play().catch(function(){});}catch(e){}launchConfetti();document.querySelectorAll('.cloud').forEach(function(c){var r=c.getBoundingClientRect();var isLeft=r.left+r.width/2 < window.innerWidth/2;c.style.animation='none';c.classList.add('cloud-exit');c.style.transition='transform 0.6s ease-in';void c.offsetWidth;c.style.transform=isLeft?'translateX(-120vw)':'translateX(120vw)';});var w=document.querySelector('.wrap');if(w){w.classList.add('content-exit');w.style.opacity='0';w.style.transform='translateY(14px)';w.style.transition='opacity 0.45s ease,transform 0.45s ease';}setTimeout(function(){location.href='page2.html';},650);}
   yesBtn.addEventListener('click',openSuccess);
-  closeOverlay.addEventListener('click',()=>{document.body.classList.add('page-exit');setTimeout(()=>{location.href='page2.html';},450);});
+   closeOverlay.addEventListener('click',()=>{try{bgTryPlay();}catch(e){}document.body.classList.add('page-exit');setTimeout(()=>{location.href='page2.html';},450);});
   if(overlayX)overlayX.addEventListener('click',()=>overlay.classList.remove('open'));
   overlay.addEventListener('click',(e)=>{if(e.target===overlay)overlay.classList.remove('open');});
   document.addEventListener('keydown',(e)=>{if(e.key==='Escape')overlay.classList.remove('open');});

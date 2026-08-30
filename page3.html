@@ -55,6 +55,7 @@ h1{font-family:'Silkscreen',monospace;font-size:clamp(18px,5.5vw,24px);line-heig
 </style>
 </head>
 <body>
+<audio id="bgMusic" src="assets/silly-cat.mp3" loop preload="auto" style="display:none"></audio>
 <div class="clouds-layer" aria-hidden="true"><div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div><div class="cloud c4"></div><div class="cloud c5"></div><div class="cloud c6"></div><div class="cloud c7"></div></div>
 <div class="hearts-layer" aria-hidden="true" id="heartsLayer"></div>
 <div class="wrap" id="wrap">
@@ -90,6 +91,7 @@ h1{font-family:'Silkscreen',monospace;font-size:clamp(18px,5.5vw,24px);line-heig
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){
+function initBg(){const bg=document.getElementById('bgMusic');if(!bg)return()=>{};bg.volume=0.35;bg.loop=true;const s=sessionStorage.getItem('bgTime');if(s)try{bg.currentTime=parseFloat(s);}catch(e){}const was=sessionStorage.getItem('bgPlaying')==='1';if(was)bg.play().catch(()=>{});function tryPlay(){if(bg.paused)bg.play().then(()=>sessionStorage.setItem('bgPlaying','1')).catch(()=>{});}document.addEventListener('click',tryPlay,{once:true});document.addEventListener('touchstart',tryPlay,{once:true});setInterval(()=>{if(!bg.paused)sessionStorage.setItem('bgTime',bg.currentTime)},500);window.addEventListener('beforeunload',()=>{sessionStorage.setItem('bgTime',bg.currentTime);sessionStorage.setItem('bgPlaying',bg.paused?'0':'1');});document.addEventListener('visibilitychange',()=>{if(!document.hidden&&sessionStorage.getItem('bgPlaying')==='1'&&bg.paused)bg.play().catch(()=>{});});return tryPlay;}const bgTryPlay=initBg();
 var wrap=document.getElementById('wrap');
 var clouds=document.querySelectorAll('.cloud');
 clouds.forEach(function(c){var r=c.getBoundingClientRect();if(r.left < innerWidth/2) c.style.transform='translateX(-120vw)'; else c.style.transform='translateX(120vw)';});
