@@ -75,6 +75,7 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
 </head>
 <body>
 <audio id="bgMusic" src="assets/silly-cat.mp3" loop preload="auto" style="display:none"></audio>
+<button id="soundBtn" style="position:fixed;bottom:12px;left:12px;z-index:99;font-family:var(--font-pixel);font-size:10px;padding:6px 10px;border:2px solid #1b1030;box-shadow:2px 2px 0 #1b1030;background:#fff">🔊 Sound OFF</button>
 <div class="clouds-layer" aria-hidden="true"><div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div><div class="cloud c4"></div><div class="cloud c5"></div><div class="cloud c6"></div><div class="cloud c7"></div></div>
 <div class="hearts-layer" aria-hidden="true" id="heartsLayer"></div>
 <div class="wrap">
@@ -99,7 +100,16 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){
-  function initBg(){const bg=document.getElementById('bgMusic');if(!bg)return()=>{};bg.volume=0.35;bg.loop=true;const saved=sessionStorage.getItem('bgTime');if(saved)try{bg.currentTime=parseFloat(saved);}catch(e){}const wasPlaying=sessionStorage.getItem('bgPlaying')==='1';if(wasPlaying)bg.play().catch(()=>{});function tryPlay(){if(bg.paused)bg.play().then(()=>sessionStorage.setItem('bgPlaying','1')).catch(()=>{});}document.addEventListener('click',tryPlay,{once:true});document.addEventListener('touchstart',tryPlay,{once:true});setInterval(()=>{if(!bg.paused)sessionStorage.setItem('bgTime',bg.currentTime)},500);window.addEventListener('beforeunload',()=>{sessionStorage.setItem('bgTime',bg.currentTime);sessionStorage.setItem('bgPlaying',bg.paused?'0':'1');});document.addEventListener('visibilitychange',()=>{if(!document.hidden&&sessionStorage.getItem('bgPlaying')==='1'&&bg.paused)bg.play().catch(()=>{});});return tryPlay;}const bgTryPlay=initBg();
+  function initBg(){const bg=document.getElementById('bgMusic');const btn=document.getElementById('soundBtn');if(!bg)return()=>{};bg.muted=false;bg.volume=0.6;bg.loop=true;bg.preload='auto';function updateBtn(){if(btn)btn.textContent=bg.paused?'🔊 Sound OFF':'🔊 Sound ON';}
+const saved=sessionStorage.getItem('bgTime');if(saved)try{bg.currentTime=parseFloat(saved);}catch(e){}
+const wasPlaying=sessionStorage.getItem('bgPlaying')==='1';if(wasPlaying){bg.play().then(updateBtn).catch(()=>{});}else updateBtn();
+function tryPlay(){bg.muted=false;if(ctx&&ctx.state==='suspended')ctx.resume().catch(()=>{});if(bg.paused) return bg.play().then(()=>{sessionStorage.setItem('bgPlaying','1');updateBtn();}).catch(e=>{console.log('[bgMusic] play blocked',e);});}
+document.addEventListener('click',tryPlay,{once:true});document.addEventListener('touchstart',tryPlay,{once:true});
+setInterval(()=>{if(!bg.paused)sessionStorage.setItem('bgTime',bg.currentTime)},500);
+window.addEventListener('beforeunload',()=>{sessionStorage.setItem('bgTime',bg.currentTime);sessionStorage.setItem('bgPlaying',bg.paused?'0':'1');});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&sessionStorage.getItem('bgPlaying')==='1'&&bg.paused)bg.play().then(updateBtn).catch(()=>{});});
+if(btn)btn.addEventListener('click',function(e){e.stopPropagation();if(bg.paused){bg.muted=false;bg.play().then(()=>{sessionStorage.setItem('bgPlaying','1');updateBtn();}).catch(err=>console.log('[bgMusic] toggle play fail',err));}else{bg.pause();sessionStorage.setItem('bgPlaying','0');updateBtn();}});
+return tryPlay;}const bgTryPlay=initBg();
   const yesBtn=document.getElementById('yesBtn');
   const noBtn=document.getElementById('noBtn');
   const overlay=document.getElementById('overlay');
@@ -109,7 +119,7 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
   let ctx;function tone(freq,dur,type,vol){try{ctx=ctx||new(window.AudioContext||window.webkitAudioContext)();if(ctx.state==='suspended')ctx.resume();let o=ctx.createOscillator(),g=ctx.createGain();o.type=type||'sine';o.frequency.value=freq;g.gain.value=vol||0.3;o.connect(g);g.connect(ctx.destination);g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+dur);o.start();o.stop(ctx.currentTime+dur);}catch(e){}}
   function woosh(){try{let f=600+Math.random()*400;ctx=ctx||new(window.AudioContext||window.webkitAudioContext)();if(ctx.state==='suspended')ctx.resume();let o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=f;o.frequency.linearRampToValueAtTime(f+300,ctx.currentTime+0.15);g.gain.value=0.2;g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+0.15);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+0.15);}catch(e){}}
   function chime(){try{tone(523,0.3,'sine',0.3);setTimeout(function(){tone(659,0.3,'sine',0.3)},100);setTimeout(function(){tone(784,0.5,'sine',0.3)},200);}catch(e){}}
-  let _yippeePreload=null;function preloadYippee(){try{if(!_yippeePreload){_yippeePreload=new Audio('assets/yippee-tbh.mp3');_yippeePreload.preload='auto';_yippeePreload.volume=0.6;_yippeePreload.load();}}catch(e){}}
+  let _yippeePreload=null;function preloadYippee(){try{if(!_yippeePreload){_yippeePreload=new Audio('assets/yippee-tbh.mp3');_yippeePreload.preload='auto';_yippeePreload.volume=0.8;_yippeePreload.load();}}catch(e){}}
   document.addEventListener('click',preloadYippee,{once:true});document.addEventListener('touchstart',preloadYippee,{once:true,passive:true});
   const canvas=document.getElementById('confettiCanvas');
   const heartsLayer=document.getElementById('heartsLayer');
@@ -167,7 +177,7 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
     }
     if(confettiRAF)cancelAnimationFrame(confettiRAF);confettiRAF=requestAnimationFrame(frame);
   }
-    function openSuccess(){try{bgTryPlay();}catch(e){}try{let yippee=new Audio('assets/yippee-tbh.mp3');yippee.volume=0.6;yippee.currentTime=0;yippee.play().catch(function(){});}catch(e){}launchConfetti();document.querySelectorAll('.cloud').forEach(function(c){var r=c.getBoundingClientRect();var isLeft=r.left+r.width/2 < window.innerWidth/2;c.style.animation='none';c.classList.add('cloud-exit');c.style.transition='transform 0.6s ease-in';void c.offsetWidth;c.style.transform=isLeft?'translateX(-120vw)':'translateX(120vw)';});var w=document.querySelector('.wrap');if(w){w.classList.add('content-exit');w.style.opacity='0';w.style.transform='translateY(14px)';w.style.transition='opacity 0.45s ease,transform 0.45s ease';}setTimeout(function(){location.href='page2.html';},650);}
+    function openSuccess(){try{bgTryPlay();}catch(e){}try{let yippee=new Audio('assets/yippee-tbh.mp3');yippee.volume=0.8;yippee.currentTime=0;yippee.play().catch(function(e){console.log('[yippee] play fail',e)});}catch(e){}launchConfetti();document.querySelectorAll('.cloud').forEach(function(c){var r=c.getBoundingClientRect();var isLeft=r.left+r.width/2 < window.innerWidth/2;c.style.animation='none';c.classList.add('cloud-exit');c.style.transition='transform 0.6s ease-in';void c.offsetWidth;c.style.transform=isLeft?'translateX(-120vw)':'translateX(120vw)';});var w=document.querySelector('.wrap');if(w){w.classList.add('content-exit');w.style.opacity='0';w.style.transform='translateY(14px)';w.style.transition='opacity 0.45s ease,transform 0.45s ease';}setTimeout(function(){location.href='page2.html';},650);}
   yesBtn.addEventListener('click',openSuccess);
    closeOverlay.addEventListener('click',()=>{try{bgTryPlay();}catch(e){}document.body.classList.add('page-exit');setTimeout(()=>{location.href='page2.html';},450);});
   if(overlayX)overlayX.addEventListener('click',()=>overlay.classList.remove('open'));

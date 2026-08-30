@@ -36,6 +36,7 @@ h1.yipee{font-family:'Silkscreen',monospace;font-size:clamp(22px,7vw,32px);color
 </head>
 <body>
 <audio id="bgMusic" src="assets/silly-cat.mp3" loop preload="auto" style="display:none"></audio>
+<button id="soundBtn" style="position:fixed;bottom:12px;left:12px;z-index:99;font-family:var(--font-pixel);font-size:10px;padding:6px 10px;border:2px solid #1b1030;box-shadow:2px 2px 0 #1b1030;background:#fff">🔊 Sound OFF</button>
 <div class="clouds-layer" aria-hidden="true"><div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div><div class="cloud c4"></div><div class="cloud c5"></div><div class="cloud c6"></div><div class="cloud c7"></div></div>
 <div class="hearts-layer" aria-hidden="true" id="heartsLayer"></div>
 <div class="wrap" id="wrap">
@@ -45,20 +46,29 @@ h1.yipee{font-family:'Silkscreen',monospace;font-size:clamp(22px,7vw,32px);color
 </div>
 <script>
 (function(){
-function initBg(){const bg=document.getElementById('bgMusic');if(!bg)return()=>{};bg.volume=0.35;bg.loop=true;const s=sessionStorage.getItem('bgTime');if(s)try{bg.currentTime=parseFloat(s);}catch(e){}const was=sessionStorage.getItem('bgPlaying')==='1';if(was)bg.play().catch(()=>{});function tryPlay(){if(bg.paused)bg.play().then(()=>sessionStorage.setItem('bgPlaying','1')).catch(()=>{});}document.addEventListener('click',tryPlay,{once:true});document.addEventListener('touchstart',tryPlay,{once:true});setInterval(()=>{if(!bg.paused)sessionStorage.setItem('bgTime',bg.currentTime)},500);window.addEventListener('beforeunload',()=>{sessionStorage.setItem('bgTime',bg.currentTime);sessionStorage.setItem('bgPlaying',bg.paused?'0':'1');});document.addEventListener('visibilitychange',()=>{if(!document.hidden&&sessionStorage.getItem('bgPlaying')==='1'&&bg.paused)bg.play().catch(()=>{});});return tryPlay;}const bgTryPlay=initBg();
+let ctx;function initBg(){const bg=document.getElementById('bgMusic');const btn=document.getElementById('soundBtn');if(!bg)return()=>{};bg.muted=false;bg.volume=0.6;bg.loop=true;bg.preload='auto';function updateBtn(){if(btn)btn.textContent=bg.paused?'🔊 Sound OFF':'🔊 Sound ON';}
+const saved=sessionStorage.getItem('bgTime');if(saved)try{bg.currentTime=parseFloat(saved);}catch(e){}
+const wasPlaying=sessionStorage.getItem('bgPlaying')==='1';if(wasPlaying){bg.play().then(updateBtn).catch(()=>{});}else updateBtn();
+function tryPlay(){bg.muted=false;if(ctx&&ctx.state==='suspended')ctx.resume().catch(()=>{});if(bg.paused) return bg.play().then(()=>{sessionStorage.setItem('bgPlaying','1');updateBtn();}).catch(e=>{console.log('[bgMusic] play blocked',e);});}
+document.addEventListener('click',tryPlay,{once:true});document.addEventListener('touchstart',tryPlay,{once:true});
+setInterval(()=>{if(!bg.paused)sessionStorage.setItem('bgTime',bg.currentTime)},500);
+window.addEventListener('beforeunload',()=>{sessionStorage.setItem('bgTime',bg.currentTime);sessionStorage.setItem('bgPlaying',bg.paused?'0':'1');});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&sessionStorage.getItem('bgPlaying')==='1'&&bg.paused)bg.play().then(updateBtn).catch(()=>{});});
+if(btn)btn.addEventListener('click',function(e){e.stopPropagation();if(bg.paused){bg.muted=false;bg.play().then(()=>{sessionStorage.setItem('bgPlaying','1');updateBtn();}).catch(err=>console.log('[bgMusic] toggle play fail',err));}else{bg.pause();sessionStorage.setItem('bgPlaying','0');updateBtn();}});
+return tryPlay;}const bgTryPlay=initBg();
 var heartsLayer=document.getElementById('heartsLayer');
 var colors=['#ffffff','#ffffff','#a9c6ff','#8a7dff'];
 for(var i=0;i<16;i++){var el=document.createElement('span');el.textContent='\u2665';var size=(16+Math.random()*12).toFixed(1);var left=(Math.random()*100).toFixed(2);var dur=10+Math.random()*6;var delay=-(Math.random()*dur);var rs=(-18+Math.random()*36).toFixed(1);var re=(parseFloat(rs)+(Math.random()*20-10)).toFixed(1);var col=colors[Math.floor(Math.random()*colors.length)];var opa=(0.58+Math.random()*0.08).toFixed(2);el.style.left=left+'%';el.style.fontSize=size+'px';el.style.color=col;el.style.setProperty('--heart-opa',opa);el.style.setProperty('--rot-start',rs+'deg');el.style.setProperty('--rot-end',re+'deg');el.style.animationDuration=dur.toFixed(2)+'s';el.style.animationDelay=delay.toFixed(2)+'s';heartsLayer.appendChild(el);}
 var clouds=document.querySelectorAll('.cloud');
 clouds.forEach(function(c){var r=c.getBoundingClientRect();if(r.left < innerWidth/2) c.style.transform='translateX(-120vw)'; else c.style.transform='translateX(120vw)';});
-let yippeeAudio=new Audio('assets/yippee-tbh.mp3');yippeeAudio.volume=0.6;
-try{yippeeAudio.play().catch(function(){});}catch(e){}
-document.addEventListener('click',function(){yippeeAudio.currentTime=0;yippeeAudio.play().catch(function(){})},{once:true});
-document.addEventListener('touchstart',function(){yippeeAudio.currentTime=0;yippeeAudio.play().catch(function(){})},{once:true});
+let yippeeAudio=new Audio('assets/yippee-tbh.mp3');yippeeAudio.volume=0.8;
+try{yippeeAudio.play().catch(function(e){console.log('[yippee] play fail',e)});}catch(e){}
+document.addEventListener('click',function(){yippeeAudio.currentTime=0;yippeeAudio.play().catch(function(e){console.log('[yippee] play fail',e)})},{once:true});
+document.addEventListener('touchstart',function(){yippeeAudio.currentTime=0;yippeeAudio.play().catch(function(e){console.log('[yippee] play fail',e)})},{once:true});
 requestAnimationFrame(function(){requestAnimationFrame(function(){
 clouds.forEach(function(c){c.classList.add('cloud-enter');c.style.transform='translateX(0)';});
 var wrap=document.getElementById('wrap');wrap.classList.add('page-in');
-try{yippeeAudio.play().catch(function(){});}catch(e){}
+try{yippeeAudio.play().catch(function(e){console.log('[yippee] play fail',e)});}catch(e){}
 });});
 document.getElementById('continueBtn').addEventListener('click',function(){
 try{bgTryPlay();}catch(e){}
