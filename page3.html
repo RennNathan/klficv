@@ -187,17 +187,15 @@ function spaGo(url){
       document.head.appendChild(n.cloneNode(true));
     });
     d.querySelectorAll('#bgMusic,#soundBtn,#musicHint').forEach(function(el){el.remove();});
-    document.body.innerHTML='';
+    document.body.innerHTML=d.body.innerHTML;
     if(keepBg) document.body.appendChild(keepBg);
     if(keepBtn) document.body.appendChild(keepBtn);
     if(keepHint) document.body.appendChild(keepHint);
-    d.body.childNodes.forEach(function(n){document.body.appendChild(n.cloneNode(true));});
     history.pushState(null,'',url);
     requestAnimationFrame(function(){requestAnimationFrame(function(){
       document.querySelectorAll('.cloud').forEach(function(c){c.classList.add('cloud-enter');c.style.transform='translateX(0)';});
       var w=document.querySelector('.wrap'); if(w) w.classList.add('page-in');
     });});
-    try{var bg=document.getElementById('bgMusic');if(bg&&!bg.paused&&bg.play){bg.play().catch(function(){});}}catch(e){}
   }).catch(function(){location.href=url});
 },()=>{location.reload();});
 </script>
