@@ -200,7 +200,7 @@ function spaGo(url){
   }).catch(function(){clearTimeout(_navTimeout);location.href=url;});
 }
 var _navTimeout=setTimeout(function(){location.href=url;},8000);
-},()=>{location.reload();});
+window.addEventListener('popstate',()=>{location.reload();});
 </script>
 
 </body>
