@@ -20,7 +20,7 @@ body{
 }
 @keyframes pageIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}body{animation:pageIn 0.45s ease}body.page-exit{opacity:0;transform:translateY(14px);transition:opacity 0.45s ease,transform 0.45s ease}
 .clouds-layer{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.cloud{position:absolute;background:#FFFFFF;image-rendering:pixelated;box-shadow:0 4px 0 #ddd0ff;animation:cloudDrift 8s ease-in-out infinite alternate}
+.cloud{position:absolute;background:#FFFFFF;image-rendering:pixelated;box-shadow:0 4px 0 #ddd0ff;animation:cloudDrift 8s ease-in-out infinite alternate;transform:none;will-change:transform;transition:transform 0.6s ease-in}
 .c1{left:6%;top:22%;width:12px;height:12px;box-shadow:12px 0 #FFFFFF,24px 0 #FFFFFF,36px 0 #FFFFFF,48px 0 #FFFFFF,60px 0 #FFFFFF,0 12px #FFFFFF,12px 12px #FFFFFF,24px 12px #FFFFFF,36px 12px #FFFFFF,48px 12px #FFFFFF,60px 12px #FFFFFF,12px 24px #ddd0ff,24px 24px #ddd0ff,36px 24px #ddd0ff,48px 24px #ddd0ff,12px -12px #FFFFFF,24px -12px #FFFFFF,36px -12px #FFFFFF}
 .c2{left:28%;top:14%;width:12px;height:8px;box-shadow:12px 0 #FFFFFF,24px 0 #FFFFFF,0 8px #FFFFFF,12px 8px #FFFFFF,24px 8px #FFFFFF,12px 16px #ddd0ff,24px 16px #ddd0ff,12px -8px #FFFFFF}
 .c3{left:52%;top:28%;width:12px;height:12px;box-shadow:12px 0 #FFFFFF,24px 0 #FFFFFF,36px 0 #FFFFFF,0 12px #FFFFFF,12px 12px #FFFFFF,24px 12px #FFFFFF,36px 12px #FFFFFF,12px 24px #ddd0ff,24px 24px #ddd0ff,36px 24px #ddd0ff,12px -12px #FFFFFF,24px -12px #FFFFFF}
@@ -49,7 +49,7 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
 .wobble{animation:wobble .35s steps(4)}
 @keyframes yipeeBlink{0%,45%{opacity:1}50%,85%{opacity:0.35}100%{opacity:1}}
 .yipee{font-family:'Silkscreen',var(--font-pixel);font-size:22px;color:#1b1030;text-align:center;animation:yipeeBlink 1.8s ease infinite}
-.cloud.cloud-exit{transition:transform 0.6s ease-in}
+.cloud.cloud-exit{animation:none;transition:transform 0.6s ease-in;will-change:transform}
 .wrap.content-exit{opacity:0;transform:translateY(14px);transition:opacity 0.45s ease,transform 0.45s ease}
 @keyframes popIn{0%{transform:translate(-50%,-50%) scale(.85);opacity:0}100%{transform:translate(-50%,-50%) scale(1);opacity:1}}
 .extra-yes{position:fixed;z-index:45;background:var(--primary);color:var(--primary-text);border:3px solid #1b1030;box-shadow:2px 2px 0 #1b1030;transform:translate(-50%,-50%);animation:popIn .2s steps(4) forwards;font-family:var(--font-pixel);font-size:8px;border-radius:0;image-rendering:pixelated}
@@ -165,7 +165,7 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
     }
     if(confettiRAF)cancelAnimationFrame(confettiRAF);confettiRAF=requestAnimationFrame(frame);
   }
-    function openSuccess(){try{let yippee=new Audio('assets/yippee-tbh.mp3');yippee.volume=0.6;yippee.currentTime=0;yippee.play().catch(function(){});}catch(e){}launchConfetti();document.querySelectorAll('.cloud').forEach(function(c){var r=c.getBoundingClientRect();if(r.left < innerWidth/2)c.classList.add('cloud-exit'),c.style.transform='translateX(-120vw)';else c.classList.add('cloud-exit'),c.style.transform='translateX(120vw)';c.style.transition='transform 0.6s ease-in';});var w=document.querySelector('.wrap');if(w){w.classList.add('content-exit');w.style.opacity='0';w.style.transform='translateY(14px)';w.style.transition='opacity 0.45s ease,transform 0.45s ease';}setTimeout(function(){location.href='page2.html';},600);}
+    function openSuccess(){try{let yippee=new Audio('assets/yippee-tbh.mp3');yippee.volume=0.6;yippee.currentTime=0;yippee.play().catch(function(){});}catch(e){}launchConfetti();document.querySelectorAll('.cloud').forEach(function(c){var r=c.getBoundingClientRect();var isLeft=r.left+r.width/2 < window.innerWidth/2;c.style.animation='none';c.classList.add('cloud-exit');c.style.transition='transform 0.6s ease-in';void c.offsetWidth;c.style.transform=isLeft?'translateX(-120vw)':'translateX(120vw)';});var w=document.querySelector('.wrap');if(w){w.classList.add('content-exit');w.style.opacity='0';w.style.transform='translateY(14px)';w.style.transition='opacity 0.45s ease,transform 0.45s ease';}setTimeout(function(){location.href='page2.html';},650);}
   yesBtn.addEventListener('click',openSuccess);
   closeOverlay.addEventListener('click',()=>{document.body.classList.add('page-exit');setTimeout(()=>{location.href='page2.html';},450);});
   if(overlayX)overlayX.addEventListener('click',()=>overlay.classList.remove('open'));
