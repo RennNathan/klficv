@@ -58,6 +58,14 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
 .music-hint{position:fixed;bottom:56px;right:14px;background:#1b1030;color:#fff;border:2px solid #a9c6ff;border-radius:999px;padding:6px 12px;font-family:Silkscreen;font-size:11px;z-index:50;animation:hintPulse 1.2s infinite alternate;box-shadow:2px 2px 0 #1b1030;cursor:pointer}
 @keyframes hintPulse{from{transform:scale(1)}to{transform:scale(1.06)}}
 .music-hint.hidden{opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity 0.35s,transform 0.35s}
+.place-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:min(300px,85vw);margin:10px 0}
+.place-btn{font-family:var(--font-pixel);font-size:11px;padding:10px;border:3px solid #1b1030;background:var(--secondary-bg);color:#fff;cursor:pointer;box-shadow:3px 3px 0 #1b1030;transition:transform .08s steps(2),box-shadow .08s steps(2),background .15s;image-rendering:pixelated;text-align:center}
+.place-btn:hover{background:var(--primary-hover);transform:translate(-1px,-1px);box-shadow:4px 4px 0 #1b1030}
+.place-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #1b1030}
+.place-btn.selected{background:var(--primary);color:var(--primary-text);box-shadow:3px 3px 0 #1b1030}
+.text-input{width:min(300px,85vw);margin:10px 0}
+.text-input input{width:100%;padding:10px;border:3px solid #1a1330;background:#fff;color:#1b1030;font-family:var(--font-pixel);font-size:11px;outline:none;box-shadow:3px 3px 0 #2a2050}
+.text-input input:focus{border:2px dashed #8a7dff;box-shadow:3px 3px 0 #2a2050}
 @media (max-width:430px){.section{padding-top:8vh}}
 .date-field{width:100%;display:flex;flex-direction:column;gap:8px;align-items:center}
 #dateInput{width:min(280px,90vw);margin:16px 0 14px;height:44px;border:3px solid #1a1330;background:#fff;color:#1b1030;font-family:'Silkscreen',monospace;font-size:10px;text-align:center;outline:none;-webkit-appearance:none;appearance:none;padding:8px 10px}
@@ -106,8 +114,24 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
     </div>
     <img id="pleadGif" src="assets/huu.gif" class="gif" loading="eager" decoding="async" style="width:80px;display:block;margin:0 auto;pointer-events:none;image-rendering:auto" alt="plead">
     <div class="actions">
-      <button id="confirmBtn" class="btn btn-primary" type="button" aria-label="Confirm date">Confirm date</button>
-      <button id="maybeLaterBtn" class="btn btn-secondary" type="button" aria-label="Maybe later">Maybe later</button>
+      <button id="continueBtn" class="btn" type="button" aria-label="Continue">Continue</button>
+    </div>
+  </section>
+  <section class="section hidden" id="sec4">
+    <img src="assets/cat-jump.gif" class="gif" loading="eager" decoding="async" style="max-width:280px;width:min(280px,80vw);display:block;margin:0 auto 14px;border:3px solid #1b1030;box-shadow:2px 2px 0 #1b1030;image-rendering:auto" alt="cat jump">
+    <h1>Where should we go?</h1>
+    <div class="place-grid">
+      <button class="place-btn" type="button" data-place="Ayala Mall">Ayala Mall</button>
+      <button class="place-btn" type="button" data-place="Market Market">Market Market</button>
+      <button class="place-btn" type="button" data-place="SM Aura">SM Aura</button>
+      <button class="place-btn" type="button" data-place="MOA">MOA</button>
+    </div>
+    <div class="text-input">
+      <input type="text" id="placeInput" placeholder="or type your own place" aria-label="Type your own place">
+    </div>
+    <div class="actions">
+      <button id="sec4Submit" class="btn btn-primary" type="button">Submit</button>
+      <button id="maybeLaterBtn" class="btn" type="button" style="font-size:10px">Maybe later</button>
     </div>
   </section>
 </div>
@@ -255,21 +279,30 @@ return tryPlay;}const bgTryPlay=initBg();
   // date logic (from page3)
   var dateInput=document.getElementById('dateInput');
   var display=document.getElementById('selectedDisplay');
-  var confirmBtn=document.getElementById('confirmBtn');
-  var laterBtn=document.getElementById('maybeLaterBtn');
+  var continueBtn=document.getElementById('continueBtn');
+  var sec4Submit=document.getElementById('sec4Submit');
+  var placeBtns=document.querySelectorAll('.place-btn');
+  var placeInput=document.getElementById('placeInput');
+  var maybeLaterBtn=document.getElementById('maybeLaterBtn');
   var maybeOverlay=document.getElementById('overlayMaybe');
   var closeMaybe=document.getElementById('closeMaybe');
   var toast2=document.getElementById('toast');
   var overlay2=document.getElementById('successOverlay');
   var successMsg=document.getElementById('successMsg');
   var closeSuccess=document.getElementById('closeSuccess');
+  var sec1=document.getElementById('sec1');
+  var sec4=document.getElementById('sec4');
+  var selectedPlace='';
   function formatDate(v){if(!v)return'';var d=new Date(v+'T12:00:00');return d.toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'})}
   function getWeekday(v){if(!v)return'';var d=new Date(v+'T00:00:00');return d.toLocaleDateString('en-US',{weekday:'long'})}
   function updateDisplay(){var f=formatDate(dateInput.value);var w=getWeekday(dateInput.value);display.textContent=w?'Selected: '+f+' \u2014 '+w:'Selected: '+f}
+  placeBtns.forEach(function(btn){btn.addEventListener('click',function(){placeBtns.forEach(function(b){b.classList.remove('selected')});btn.classList.add('selected');selectedPlace=btn.getAttribute('data-place')});});
+  placeInput.addEventListener('input',function(){if(placeInput.value.trim()){placeBtns.forEach(function(b){b.classList.remove('selected')});selectedPlace=placeInput.value.trim()}});
   dateInput.addEventListener('input',updateDisplay);dateInput.addEventListener('change',updateDisplay);updateDisplay();
   function showToast2(m){toast2.textContent=m;toast2.classList.add('show');clearTimeout(showToast2._t);showToast2._t=setTimeout(()=>toast2.classList.remove('show'),1800)}
-  confirmBtn.addEventListener('click',function(){try{bgTryPlay();if(typeof ctx!=='undefined'&&ctx&&ctx.state==='suspended')ctx.resume().catch(()=>{});}catch(e){}if(!dateInput.value){return}var fmt=formatDate(dateInput.value);var wd=getWeekday(dateInput.value);successMsg.textContent="Okay bye see u";overlay2.classList.add('open');launchConfetti();var subject="She said YES! \u2014 "+fmt+" \u2014 "+wd;var msg="Atasha confirmed date: "+fmt+" ("+wd+")";fetch("https://formsubmit.co/ajax/rennnathan13@gmail.com",{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({email:"rennnathan13@gmail.com",_subject:subject,date:fmt,weekday:wd,message:msg,_captcha:"false",_template:"table"})}).then(function(r){if(!r.ok)throw new Error("bad");return r.json()}).then(function(){}).catch(function(){window.location.href="mailto:rennnathan13@gmail.com?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(msg)});});
-  laterBtn.addEventListener('click',function(){try{tone(300,0.12,'square',0.15);}catch(e){}maybeOverlay.classList.add('open')});
+  continueBtn.addEventListener('click',function(){try{bgTryPlay();}catch(e){}sec4.classList.remove('hidden');sec4.scrollIntoView({behavior:'smooth'});});
+  sec4Submit.addEventListener('click',function(){try{bgTryPlay();if(typeof ctx!=='undefined'&&ctx&&ctx.state==='suspended')ctx.resume().catch(()=>{});}catch(e){}if(!dateInput.value){return}var fmt=formatDate(dateInput.value);var wd=getWeekday(dateInput.value);var place=selectedPlace||placeInput.value.trim();if(!place){showToast2('Pick a place or type one');return}var subject="She said YES! \u2014 "+fmt+" \u2014 "+wd+" \u2014 "+place;var msg="Atasha confirmed date: "+fmt+" ("+wd+") at "+place;successMsg.textContent=fmt+" at "+place;overlay2.classList.add('open');launchConfetti();fetch("https://formsubmit.co/ajax/rennnathan13@gmail.com",{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({email:"rennnathan13@gmail.com",_subject:subject,date:fmt,weekday:wd,place:place,message:msg,_captcha:"false",_template:"table"})}).then(function(r){if(!r.ok)throw new Error("bad");return r.json()}).then(function(){}).catch(function(){window.location.href="mailto:rennnathan13@gmail.com?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(msg)});});
+  maybeLaterBtn.addEventListener('click',function(){try{tone(300,0.12,'square',0.15);}catch(e){}showToast2('No worries!');setTimeout(function(){sec1.scrollIntoView({behavior:'smooth'})},400);});
   closeSuccess.addEventListener('click',function(){overlay2.classList.remove('open')});
   overlay2.addEventListener('click',function(e){if(e.target===overlay2)overlay2.classList.remove('open')});
   closeMaybe.addEventListener('click',function(){maybeOverlay.classList.remove('open')});
