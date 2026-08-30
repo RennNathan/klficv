@@ -193,6 +193,11 @@ function spaGo(url){
   fetch(url).then(r=>r.text()).then(html=>{
     const d=new DOMParser().parseFromString(html,'text/html');
     const dup=d.getElementById('bgMusic'); if(dup) dup.remove();
+    d.querySelectorAll('style,link[rel="stylesheet"]').forEach(function(n){
+      var href=n.getAttribute('href');
+      if(n.tagName==='LINK' && href && document.querySelector('link[href="'+href+'"]')) return;
+      document.head.appendChild(n.cloneNode(true));
+    });
     document.body.innerHTML=d.body.innerHTML;
     if(keepBg) document.body.appendChild(keepBg);
     history.pushState(null,'',url);
