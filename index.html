@@ -274,22 +274,23 @@ return tryPlay;}const bgTryPlay=initBg();
     setTimeout(function(){
       document.querySelectorAll('.extra-yes').forEach(function(b){b.remove();});
       document.body.classList.add('unlocked');
+      sec1.classList.add('hidden');
       sec2.classList.remove('hidden');
       var yipeeEl=sec2.querySelector('.yipee');if(yipeeEl){yipeeEl.style.animation='none';void yipeeEl.offsetWidth;yipeeEl.style.animation='yipeeBlink 3.5s ease infinite';}
-      window.scrollTo({top:0,behavior:'smooth'});
       setTimeout(function(){
         document.querySelectorAll('.cloud').forEach(function(c){c.style.animation='';c.classList.remove('cloud-exit');c.style.transform='';});
       },700);
     },650);
   }
   yesBtn.addEventListener('click',openSuccess);
-  closeOverlay.addEventListener('click',()=>{try{bgTryPlay();}catch(e){}overlay.classList.remove('open');setTimeout(function(){document.body.classList.add('unlocked');sec2.classList.remove('hidden');var y2=sec2.querySelector('.yipee');if(y2){y2.style.animation='none';void y2.offsetWidth;y2.style.animation='yipeeBlink 3.5s ease infinite';}},200);});
+  closeOverlay.addEventListener('click',()=>{try{bgTryPlay();}catch(e){}overlay.classList.remove('open');setTimeout(function(){document.body.classList.add('unlocked');sec1.classList.add('hidden');sec2.classList.remove('hidden');var y2=sec2.querySelector('.yipee');if(y2){y2.style.animation='none';void y2.offsetWidth;y2.style.animation='yipeeBlink 3.5s ease infinite';}},200);});
   if(overlayX)overlayX.addEventListener('click',()=>overlay.classList.remove('open'));
   overlay.addEventListener('click',(e)=>{if(e.target===overlay)overlay.classList.remove('open');});
   document.addEventListener('keydown',(e)=>{if(e.key==='Escape')overlay.classList.remove('open');});
 
   planDateBtn.addEventListener('click',function(){
     try{tone(400,0.12,'square',0.15);}catch(e){}
+    sec2.classList.add('hidden');
     sec3.classList.remove('hidden');
   });
 
@@ -317,7 +318,7 @@ return tryPlay;}const bgTryPlay=initBg();
   placeInput.addEventListener('input',function(){if(placeInput.value.trim()){placeBtns.forEach(function(b){b.classList.remove('selected')});selectedPlace=placeInput.value.trim()}});
   dateInput.addEventListener('input',updateDisplay);dateInput.addEventListener('change',updateDisplay);updateDisplay();
   function showToast2(m){toast2.textContent=m;toast2.classList.add('show');clearTimeout(showToast2._t);showToast2._t=setTimeout(()=>toast2.classList.remove('show'),1800)}
-  continueBtn.addEventListener('click',function(){try{bgTryPlay();tone(400,0.12,'square',0.15);}catch(e){}sec4.classList.remove('hidden');});
+  continueBtn.addEventListener('click',function(){try{bgTryPlay();tone(400,0.12,'square',0.15);}catch(e){}sec3.classList.add('hidden');sec4.classList.remove('hidden');});
   sec4Submit.addEventListener('click',function(){try{bgTryPlay();if(typeof ctx!=='undefined'&&ctx&&ctx.state==='suspended')ctx.resume().catch(()=>{});}catch(e){}if(!dateInput.value){return}var fmt=formatDate(dateInput.value);var wd=getWeekday(dateInput.value);var place=selectedPlace||placeInput.value.trim();if(!place){showToast2('Pick a place or type one');return}var subject="She said YES! \u2014 "+fmt+" \u2014 "+wd+" \u2014 "+place;var msg="Atasha confirmed date: "+fmt+" ("+wd+") at "+place;successMsg.textContent=fmt+" at "+place;overlay2.classList.add('open');launchConfetti();var fd=new URLSearchParams();fd.append('email','rennnathan13@gmail.com');fd.append('_subject',subject);fd.append('date',fmt);fd.append('weekday',wd);fd.append('place',place);fd.append('message',msg);fd.append('_captcha','false');fd.append('_template','table');fetch("https://formsubmit.co/ajax/rennnathan13@gmail.com",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:fd.toString(),mode:"cors"}).then(function(r){if(!r.ok)throw new Error("bad "+r.status);return r.json()}).then(function(){}).catch(function(e){console.log("[formsubmit]",e);window.location.href="mailto:rennnathan13@gmail.com?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(msg)});});
   maybeLaterBtn.addEventListener('click',function(){try{tone(300,0.12,'square',0.15);}catch(e){}showToast2('No worries!');setTimeout(function(){sec3.classList.add('hidden');sec1.classList.remove('hidden')},400);});
   closeSuccess.addEventListener('click',function(){overlay2.classList.remove('open')});
