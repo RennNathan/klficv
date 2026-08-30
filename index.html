@@ -125,8 +125,10 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
   <section class="section hidden" id="sec2">
     <img src="assets/potz.gif" alt="potz" class="gif" width="200" height="200" loading="eager" decoding="async" style="width:200px;height:200px;display:block;margin:0 auto 12px;image-rendering:auto;pointer-events:none">
     <h1 class="yipee">TOTOO BA TO??</h1>
-    <button id="planDateBtn" class="btn" type="button">Plan the date</button>
-  </section>
+    <button id="yadaBtn" class="btn" type="button" aria-label="Yada">Yada</button>
+      <button id="wannaDateBtn" class="btn" type="button" style="display:none" aria-label="Wanna date???">wanna date???</button>
+      <button id="ionKnowBtn" class="btn" type="button" style="display:none" aria-label="Ion know">ion know</button>
+   </section>
 
   <section class="section hidden" id="sec3">
     <img src="assets/cat-jump.gif" id="mainGif" class="gif" loading="eager" decoding="async" style="max-width:280px;width:min(280px,80vw);display:block;margin:0 auto 18px;border:3px solid #1b1030;box-shadow:2px 2px 0 #1b1030;image-rendering:auto" alt="nervous">
@@ -224,7 +226,10 @@ return tryPlay;}const bgTryPlay=initBg();
   const scrollRoot=document.getElementById('scrollRoot');
   const sec2=document.getElementById('sec2');
   const sec3=document.getElementById('sec3');
-  const planDateBtn=document.getElementById('planDateBtn');
+  const yadaBtn=document.getElementById('yadaBtn');
+const wannaDateBtn=document.getElementById('wannaDateBtn');
+const ionKnowBtn=document.getElementById('ionKnowBtn');
+const sec1=document.getElementById('sec1');
   let ctx;function tone(freq,dur,type,vol){try{ctx=ctx||new(window.AudioContext||window.webkitAudioContext)();if(ctx.state==='suspended')ctx.resume();let o=ctx.createOscillator(),g=ctx.createGain();o.type=type||'sine';o.frequency.value=freq;g.gain.value=vol||0.3;o.connect(g);g.connect(ctx.destination);g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+dur);o.start();o.stop(ctx.currentTime+dur);}catch(e){}}
   function woosh(){try{let f=600+Math.random()*400;ctx=ctx||new(window.AudioContext||window.webkitAudioContext)();if(ctx.state==='suspended')ctx.resume();let o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=f;o.frequency.linearRampToValueAtTime(f+300,ctx.currentTime+0.15);g.gain.value=0.2;g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+0.15);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+0.15);}catch(e){}}
   let _yippeePreload=null;function preloadYippee(){try{if(!_yippeePreload){_yippeePreload=new Audio('assets/yippee-tbh.mp3');_yippeePreload.preload='auto';_yippeePreload.volume=0.8;_yippeePreload.load();}}catch(e){}}
@@ -310,11 +315,9 @@ return tryPlay;}const bgTryPlay=initBg();
   overlay.addEventListener('click',(e)=>{if(e.target===overlay)overlay.classList.remove('open');});
   document.addEventListener('keydown',(e)=>{if(e.key==='Escape')overlay.classList.remove('open');});
 
-  planDateBtn.addEventListener('click',function(){
-    try{tone(400,0.12,'square',0.15);}catch(e){}
-    sec2.classList.add('hidden');
-    sec3.classList.remove('hidden');
-  });
+  yadaBtn.addEventListener('click',function(){try{tone(400,0.12,'square',0.15);}catch(e){}yadaBtn.style.display='none';wannaDateBtn.style.display='';ionKnowBtn.style.display='';});
+wannaDateBtn.addEventListener('click',function(){try{tone(400,0.12,'square',0.15);}catch(e){}sec2.classList.add('hidden');sec3.classList.remove('hidden');});
+ionKnowBtn.addEventListener('click',function(){try{tone(400,0.12,'square',0.15);}catch(e){}sec2.classList.add('hidden');sec1.classList.remove('hidden');});
 
   // date logic (from page3)
   var dateInput=document.getElementById('dateInput');
