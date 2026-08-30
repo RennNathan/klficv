@@ -201,6 +201,10 @@ function spaGo(url){
       if(s.src){var ns=document.createElement('script');ns.src=s.src;document.body.appendChild(ns);}
       else{try{eval(s.textContent)}catch(e){console.log('[spa] eval fail',e)}}
     });
+    requestAnimationFrame(function(){requestAnimationFrame(function(){
+      document.querySelectorAll('.cloud').forEach(function(c){c.classList.add('cloud-enter');c.style.transform='translateX(0)';});
+      var w=document.querySelector('.wrap'); if(w) w.classList.add('page-in');
+    });});
   }).catch(()=>{location.href=url});
 }
 window.addEventListener('popstate',()=>{location.reload();});

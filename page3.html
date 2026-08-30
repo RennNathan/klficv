@@ -11,8 +11,10 @@
 html{-webkit-tap-highlight-color:transparent}
 body{min-height:100dvh;display:flex;align-items:flex-start;justify-content:center;background:linear-gradient(180deg,#1b1030 0%,#0e0a1f 55%,#070612 100%);background-color:var(--bg);font-family:'Silkscreen',monospace;font-size:clamp(14px,4vw,16px);line-height:1.6;color:#fff;padding:0 12px calc(20px + env(safe-area-inset-bottom));position:relative;overflow-x:hidden}
 .clouds-layer{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
-.cloud{position:absolute;background:#fff}
-.cloud.cloud-enter{transition:transform 0.6s ease-out}
+.cloud{position:absolute;background:#fff;transition:transform 0.6s ease-out;will-change:transform}
+.cloud.cloud-enter{transform:translateX(0)}
+.cloud.cloud-exit{transition:transform 0.6s ease-in;will-change:transform}
+.wrap.content-exit{opacity:0;transform:translateY(14px);transition:opacity 0.45s ease,transform 0.45s ease}
 .c1{left:-2%;top:22px;width:28px;height:20px;box-shadow:28px 0 #fff,56px 0 #fff,14px -14px #fff,42px -14px #fff,0 20px #fff,28px 20px #fff,56px 20px #fff,84px 14px #fff,14px 40px #ddd0ff,42px 40px #ddd0ff,70px 40px #ddd0ff}
 .c2{left:18%;top:68px;width:36px;height:24px;box-shadow:36px 0 #fff,72px 0 #fff,18px -14px #fff,54px -14px #fff,0 24px #fff,36px 24px #fff,72px 24px #fff,108px 14px #fff,18px 48px #ddd0ff,54px 48px #ddd0ff,90px 48px #ddd0ff}
 .c3{left:38%;top:18px;width:44px;height:28px;box-shadow:44px 0 #fff,88px 0 #fff,22px -16px #fff,66px -16px #fff,0 28px #fff,44px 28px #fff,88px 28px #fff,132px 16px #fff,22px 56px #ddd0ff,66px 56px #ddd0ff,110px 56px #ddd0ff}
@@ -55,8 +57,8 @@ h1{font-family:'Silkscreen',monospace;font-size:clamp(18px,5.5vw,24px);line-heig
 </style>
 </head>
 <body>
-<audio id="bgMusic" src="assets/silly-cat.mp3" loop autoplay preload="auto" style="display:none"></audio>
-<button id="soundBtn" style="position:fixed;bottom:12px;left:12px;z-index:99;font-family:var(--font-pixel);font-size:10px;padding:6px 10px;border:2px solid #1b1030;box-shadow:2px 2px 0 #1b1030;background:#fff">🔊 Sound ON</button>
+<audio id="bgMusic" src="assets/silly-cat.mp3" loop preload="auto" style="display:none"></audio>
+<button id="soundBtn" style="position:fixed;bottom:12px;left:12px;z-index:99;font-family:var(--font-pixel);font-size:10px;padding:6px 10px;border:2px solid #1b1030;box-shadow:2px 2px 0 #1b1030;background:#fff">🔊 Sound OFF</button>
 <div class="clouds-layer" aria-hidden="true"><div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div><div class="cloud c4"></div><div class="cloud c5"></div><div class="cloud c6"></div><div class="cloud c7"></div></div>
 <div class="hearts-layer" aria-hidden="true" id="heartsLayer"></div>
 <div class="wrap" id="wrap">
@@ -94,7 +96,7 @@ h1{font-family:'Silkscreen',monospace;font-size:clamp(18px,5.5vw,24px);line-heig
 (function(){
 function initBg(){const bg=document.getElementById('bgMusic');const btn=document.getElementById('soundBtn');if(!bg)return()=>{};bg.muted=false;bg.volume=0.6;bg.loop=true;bg.preload='auto';function updateBtn(){if(btn)btn.textContent=bg.paused?'🔊 Sound OFF':'🔊 Sound ON';}
 const saved=sessionStorage.getItem('bgTime');if(saved)try{bg.currentTime=parseFloat(saved);}catch(e){}
-let stored=sessionStorage.getItem('bgPlaying'); if(stored!=='1'){ sessionStorage.setItem('bgPlaying','1'); stored='1'; } try{localStorage.setItem('soundFixV3','1')}catch(e){}const wasPlaying=sessionStorage.getItem('bgPlaying')==='1';if(wasPlaying){bg.play().then(updateBtn).catch(()=>{});updateBtn();}else updateBtn();
+let stored=sessionStorage.getItem('bgPlaying'); if(stored!=='1'){ sessionStorage.setItem('bgPlaying','1'); stored='1'; } try{localStorage.setItem('soundFixV3','1')}catch(e){}const wasPlaying=sessionStorage.getItem('bgPlaying')==='1';if(wasPlaying){bg.play().then(updateBtn).catch(()=>{});}else updateBtn();
 function tryPlay(){bg.muted=false;if(ctx&&ctx.state==='suspended')ctx.resume().catch(()=>{});if(bg.paused) return bg.play().then(()=>{sessionStorage.setItem('bgPlaying','1');updateBtn();}).catch(e=>{console.log('[bgMusic] play blocked',e);});}
 document.addEventListener('click',tryPlay,{once:true});document.addEventListener('touchstart',tryPlay,{once:true});
 setInterval(()=>{if(!bg.paused)sessionStorage.setItem('bgTime',bg.currentTime)},500);
@@ -147,7 +149,7 @@ if(p<1&&alive>0)confettiRAF=requestAnimationFrame(frame);else{ctx2.clearRect(0,0
 }
 if(confettiRAF)cancelAnimationFrame(confettiRAF);confettiRAF=requestAnimationFrame(frame)
 }
-confirmBtn.addEventListener('click',function(){try{bgTryPlay();if(typeof ctx!=='undefined'&&ctx&&ctx.state==='suspended')ctx.resume().catch(()=>{});}catch(e){}if(!dateInput.value){return}var fmt=formatDate(dateInput.value);var wd=getWeekday(dateInput.value);successMsg.textContent="Okay bye see u";overlay.classList.add('open');launchConfetti();var subject="She said YES! \u2014 "+fmt+" \u2014 "+wd;var msg="Atasha confirmed date: "+fmt+" ("+wd+")";fetch("https://formsubmit.co/ajax/rennnathan13@gmail.com",{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({email:"rennnathan13@gmail.com",_subject:subject,date:fmt,weekday:wd,message:msg,_captcha:"false",_template:"table"})}).then(function(r){if(!r.ok)throw new Error("bad");return r.json()}).then(function(){}).catch(function(){window.location.href="mailto:rennnathan13@gmail.com?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(msg)});});
+confirmBtn.addEventListener('click',function(){try{bgTryPlay();if(typeof ctx!=='undefined'&&ctx&&ctx.state==='suspended')ctx.resume().catch(()=>{});}catch(e){}if(!dateInput.value){return}var fmt=formatDate(dateInput.value);var wd=getWeekday(dateInput.value);successMsg.textContent="Okay bye see u";overlay.classList.add('open');launchConfetti();var subject="She said YES! \u2014 "+fmt+" \u2014 "+wd;var msg="Atasha confirmed date: "+fmt+" ("+wd+")";fetch("https://formsubmit.co/ajax/rennnathan13@gmail.com",{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({email:"rennnathan13@gmail.com",_subject:subject,date:fmt,weekday:wd,message:msg,_captcha:"false",_template:"table"})}).then(function(r){if(!r.ok)throw new Error("bad");return r.json()}).then(function(){}).catch(function(){window.location.href="mailto:rennnathan13@gmail.com?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(msg)});try{var a=new Audio('assets/yippee-tbh.mp3');a.volume=0.8;a.currentTime=0;a.play().catch(function(e){console.log('[yippee] play fail',e)})}catch(e){}});
 laterBtn.addEventListener('click',function(){try{tone(300,0.12,'square',0.15);}catch(e){}maybeOverlay.classList.add('open')});
 closeSuccess.addEventListener('click',function(){overlay.classList.remove('open')});
 overlay.addEventListener('click',function(e){if(e.target===overlay)overlay.classList.remove('open')});
@@ -171,6 +173,10 @@ function spaGo(url){
       if(s.src){var ns=document.createElement('script');ns.src=s.src;document.body.appendChild(ns);}
       else{try{eval(s.textContent)}catch(e){console.log('[spa] eval fail',e)}}
     });
+    requestAnimationFrame(function(){requestAnimationFrame(function(){
+      document.querySelectorAll('.cloud').forEach(function(c){c.classList.add('cloud-enter');c.style.transform='translateX(0)';});
+      var w=document.querySelector('.wrap'); if(w) w.classList.add('page-in');
+    });});
   }).catch(()=>{location.href=url});
 }
 window.addEventListener('popstate',()=>{location.reload();});
