@@ -26,8 +26,8 @@ body{min-height:100dvh;display:flex;align-items:center;justify-content:center;ba
 .wrap{width:100%;max-width:420px;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;position:relative;z-index:2;padding:24px 16px;text-align:center;opacity:0;transform:translateY(14px)}
 .wrap.page-in{animation:pageIn 0.45s ease forwards}
 @keyframes pageIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-@keyframes yipeeBlink{0%,45%{opacity:1}50%,85%{opacity:0.35}100%{opacity:1}}
-h1.yipee{font-family:'Silkscreen',monospace;font-size:clamp(22px,7vw,32px);color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.4);animation:yipeeBlink 1.8s ease infinite}
+@keyframes yipeeBlink{0%,88%{opacity:1}92%{opacity:0.35}96%{opacity:1}100%{opacity:1}}
+h1.yipee{font-family:'Silkscreen',monospace;font-size:22px;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.4);opacity:1;animation:yipeeBlink 2.2s ease infinite}
 .btn{font-family:'Silkscreen',monospace;font-size:10px;cursor:pointer;border:3px solid #1b1030;background:var(--primary);color:#fff;box-shadow:3px 3px 0 #1b1030;padding:10px 18px;min-width:140px;height:44px;display:inline-flex;align-items:center;justify-content:center;user-select:none;touch-action:manipulation}
 .btn:hover{background:var(--primary-hover)}
 .btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #1b1030}

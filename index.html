@@ -47,8 +47,8 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
 #noBtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #1b1030,inset 0 1px 0 rgba(255,255,255,0.4)}
 @keyframes wobble{0%{transform:rotate(0)}25%{transform:rotate(-1deg)}50%{transform:rotate(1deg)}75%{transform:rotate(-1deg)}100%{transform:rotate(0)}}
 .wobble{animation:wobble .35s steps(4)}
-@keyframes yipeeBlink{0%,45%{opacity:1}50%,85%{opacity:0.35}100%{opacity:1}}
-.yipee{font-family:'Silkscreen',var(--font-pixel);font-size:22px;color:#1b1030;text-align:center;animation:yipeeBlink 1.8s ease infinite}
+@keyframes yipeeBlink{0%,88%{opacity:1}92%{opacity:0.35}96%{opacity:1}100%{opacity:1}}
+.yipee{font-family:'Silkscreen',var(--font-pixel);font-size:22px;color:#1b1030;text-align:center;opacity:1;animation:yipeeBlink 2.2s ease infinite}
 .cloud.cloud-exit{animation:none;transition:transform 0.6s ease-in;will-change:transform}
 .wrap.content-exit{opacity:0;transform:translateY(14px);transition:opacity 0.45s ease,transform 0.45s ease}
 @keyframes popIn{0%{transform:translate(-50%,-50%) scale(.85);opacity:0}100%{transform:translate(-50%,-50%) scale(1);opacity:1}}
