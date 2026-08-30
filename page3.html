@@ -179,7 +179,9 @@ function spaGo(url){
   const keepBg=document.getElementById('bgMusic');
   const keepBtn=document.getElementById('soundBtn');
   const keepHint=document.getElementById('musicHint');
+  var _navTimeout=setTimeout(function(){location.href=url;},3000);
   fetch(url).then(r=>r.text()).then(html=>{
+    clearTimeout(_navTimeout);
     const d=new DOMParser().parseFromString(html,'text/html');
     d.querySelectorAll('style,link[rel="stylesheet"]').forEach(function(n){
       var href=n.getAttribute('href');
@@ -196,10 +198,8 @@ function spaGo(url){
       document.querySelectorAll('.cloud').forEach(function(c){c.classList.add('cloud-enter');c.style.transform='translateX(0)';});
       var w=document.querySelector('.wrap'); if(w) w.classList.add('page-in');
     });});
-    clearTimeout(_navTimeout);
   }).catch(function(){clearTimeout(_navTimeout);location.href=url;});
 }
-var _navTimeout=setTimeout(function(){location.href=url;},8000);
 window.addEventListener('popstate',()=>{location.reload();});
 </script>
 
