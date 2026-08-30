@@ -101,6 +101,9 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
   const closeOverlay=document.getElementById('closeOverlay');
   const overlayX=document.getElementById('overlayX');
   const toast=document.getElementById('toast');
+  let ctx;function tone(freq,dur,type,vol){try{ctx=ctx||new(window.AudioContext||window.webkitAudioContext)();if(ctx.state==='suspended')ctx.resume();let o=ctx.createOscillator(),g=ctx.createGain();o.type=type||'sine';o.frequency.value=freq;g.gain.value=vol||0.3;o.connect(g);g.connect(ctx.destination);g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+dur);o.start();o.stop(ctx.currentTime+dur);}catch(e){}}
+  function woosh(){try{let f=600+Math.random()*400;ctx=ctx||new(window.AudioContext||window.webkitAudioContext)();if(ctx.state==='suspended')ctx.resume();let o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=f;o.frequency.linearRampToValueAtTime(f+300,ctx.currentTime+0.15);g.gain.value=0.2;g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+0.15);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+0.15);}catch(e){}}
+  function chime(){try{tone(523,0.3,'sine',0.3);setTimeout(function(){tone(659,0.3,'sine',0.3)},100);setTimeout(function(){tone(784,0.5,'sine',0.3)},200);}catch(e){}}
   const canvas=document.getElementById('confettiCanvas');
   const heartsLayer=document.getElementById('heartsLayer');
   const heartsColors=['#ffffff','#ffffff','#a9c6ff','#d7cfff','#8a7dff'];
@@ -115,7 +118,7 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
   function showToast(msg){toast.textContent=msg;toast.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(()=>toast.classList.remove('show'),1800);}
    function getNoText(idx){return noTexts[Math.min(idx,noTexts.length-1)];}
   noBtn.addEventListener('click',function(e){
-    e.preventDefault();noIndex++;const nextText=getNoText(noIndex);noBtn.textContent=nextText;showToast(nextText);
+     e.preventDefault();try{tone(400,0.12,'square',0.15);}catch(e){}noIndex++;const nextText=getNoText(noIndex);noBtn.textContent=nextText;showToast(nextText);
     const vw=window.innerWidth,vh=window.innerHeight;
     for(let i=0;i<3;i++){
       let s,x,y,fx,fy;let lastCandidate=null;let placed=false;
@@ -134,8 +137,8 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
        btn.style.left=fx+'px';btn.style.top=fy+'px';let z=Math.min(45+totalSpawned,60);btn.style.zIndex=String(z);btn.style.width=buttonWidth+'px';btn.style.height=buttonHeight+'px';
       const fsRaw=buttonHeight*0.42/16,fs=Math.max(0.55,Math.min(0.85,fsRaw));btn.style.fontSize=fs.toFixed(2)+'rem';
       const rot=(Math.random()*6-3);btn.style.transform='translate(-50%, -50%) rotate('+rot.toFixed(1)+'deg)';
-      btn.addEventListener('click',openSuccess);document.body.appendChild(btn);
-    }
+       btn.addEventListener('click',openSuccess);document.body.appendChild(btn);try{woosh();}catch(e){try{tone(600+Math.random()*400,0.15,'sine',0.2)}catch(e2){}}
+     }
     noClickCount++;noBtn.style.transition='transform .08s steps(2)';noBtn.style.transform='scale(0.95)';setTimeout(()=>{noBtn.style.transform='';},150);
      if(photoIdx<7){photoIdx++;var ps=document.getElementById('photoSwitch');if(ps)ps.src=photoImgs[photoIdx];}
   });
@@ -157,7 +160,7 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
     }
     if(confettiRAF)cancelAnimationFrame(confettiRAF);confettiRAF=requestAnimationFrame(frame);
   }
-   function openSuccess(){overlay.classList.add('open');launchConfetti();}
+    function openSuccess(){overlay.classList.add('open');try{chime();}catch(e){try{tone(523,0.3,'sine',0.3);setTimeout(function(){tone(659,0.3,'sine',0.3)},100);setTimeout(function(){tone(784,0.5,'sine',0.3)},200);}catch(e2){}}launchConfetti();}
   yesBtn.addEventListener('click',openSuccess);
   closeOverlay.addEventListener('click',()=>{document.body.classList.add('page-exit');setTimeout(()=>{location.href='page2.html';},450);});
   if(overlayX)overlayX.addEventListener('click',()=>overlay.classList.remove('open'));
