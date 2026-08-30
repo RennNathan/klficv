@@ -38,6 +38,7 @@ h1.yipee{font-family:'Silkscreen',monospace;font-size:clamp(22px,7vw,32px);color
 <div class="clouds-layer" aria-hidden="true"><div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div><div class="cloud c4"></div><div class="cloud c5"></div><div class="cloud c6"></div><div class="cloud c7"></div></div>
 <div class="hearts-layer" aria-hidden="true" id="heartsLayer"></div>
 <div class="wrap" id="wrap">
+<img src="assets/potz.gif" alt="potz" style="width:120px;display:block;margin:0 auto 12px;image-rendering:auto;mix-blend-mode:lighten;pointer-events:none">
 <h1 class="yipee">yipee</h1>
 <button id="continueBtn" class="btn" type="button">Continue -></button>
 </div>
@@ -48,10 +49,14 @@ var colors=['#ffffff','#ffffff','#a9c6ff','#8a7dff'];
 for(var i=0;i<16;i++){var el=document.createElement('span');el.textContent='\u2665';var size=(16+Math.random()*12).toFixed(1);var left=(Math.random()*100).toFixed(2);var dur=10+Math.random()*6;var delay=-(Math.random()*dur);var rs=(-18+Math.random()*36).toFixed(1);var re=(parseFloat(rs)+(Math.random()*20-10)).toFixed(1);var col=colors[Math.floor(Math.random()*colors.length)];var opa=(0.58+Math.random()*0.08).toFixed(2);el.style.left=left+'%';el.style.fontSize=size+'px';el.style.color=col;el.style.setProperty('--heart-opa',opa);el.style.setProperty('--rot-start',rs+'deg');el.style.setProperty('--rot-end',re+'deg');el.style.animationDuration=dur.toFixed(2)+'s';el.style.animationDelay=delay.toFixed(2)+'s';heartsLayer.appendChild(el);}
 var clouds=document.querySelectorAll('.cloud');
 clouds.forEach(function(c){var r=c.getBoundingClientRect();if(r.left < innerWidth/2) c.style.transform='translateX(-120vw)'; else c.style.transform='translateX(120vw)';});
+let yippeeAudio=new Audio('assets/yippee-tbh.mp3');yippeeAudio.volume=0.6;
+try{yippeeAudio.play().catch(function(){});}catch(e){}
+document.addEventListener('click',function(){yippeeAudio.currentTime=0;yippeeAudio.play().catch(function(){})},{once:true});
+document.addEventListener('touchstart',function(){yippeeAudio.currentTime=0;yippeeAudio.play().catch(function(){})},{once:true});
 requestAnimationFrame(function(){requestAnimationFrame(function(){
 clouds.forEach(function(c){c.classList.add('cloud-enter');c.style.transform='translateX(0)';});
 var wrap=document.getElementById('wrap');wrap.classList.add('page-in');
-try{var a=new Audio('assets/yippee-tbh.mp3');a.volume=0.6;a.play().catch(function(){});}catch(e){}
+try{yippeeAudio.play().catch(function(){});}catch(e){}
 });});
 document.getElementById('continueBtn').addEventListener('click',function(){
 clouds.forEach(function(c){var r=c.getBoundingClientRect();c.classList.remove('cloud-enter');c.style.transition='transform 0.6s ease-in';if(r.left < innerWidth/2) c.style.transform='translateX(-120vw)'; else c.style.transform='translateX(120vw)';});
