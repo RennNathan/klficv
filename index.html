@@ -13,9 +13,14 @@ body{min-height:100dvh;display:flex;flex-direction:column;background:linear-grad
 body.unlocked{overflow-y:auto}
 @keyframes pageIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}body{animation:pageIn 0.45s ease}body.page-exit{opacity:0;transform:translateY(14px);transition:opacity 0.45s ease,transform 0.45s ease}
 .clouds-layer{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.bg-glow{position:fixed;top:50%;left:50%;width:500px;height:500px;background:radial-gradient(circle,rgba(138,125,255,0.2) 0%,rgba(138,125,255,0.06) 30%,rgba(100,80,220,0.03) 60%,transparent 80%);pointer-events:none;z-index:0;filter:blur(60px);transform:translate(-50%,-50%);animation:glowBreath 6s ease-in-out infinite}
-.bg-glow2{position:fixed;top:30%;left:70%;width:350px;height:350px;background:radial-gradient(circle,rgba(169,198,255,0.15) 0%,rgba(169,198,255,0.05) 30%,transparent 60%);pointer-events:none;z-index:0;filter:blur(50px);transform:translate(-50%,-50%);animation:glowWobble 9s ease-in-out infinite}
-.bg-glow3{position:fixed;top:75%;left:15%;width:280px;height:280px;background:radial-gradient(circle,rgba(169,130,255,0.15) 0%,rgba(169,130,255,0.04) 30%,transparent 60%);pointer-events:none;z-index:0;filter:blur(45px);transform:translate(-50%,-50%);animation:glowDrift 11s ease-in-out infinite}
+.bg-glow{position:fixed;top:50%;left:50%;width:500px;height:500px;background:radial-gradient(circle,rgba(138,125,255,0.3) 0%,rgba(138,125,255,0.09) 30%,rgba(100,80,220,0.045) 60%,transparent 80%);pointer-events:none;z-index:0;filter:blur(70px);transform:translate(-50%,-50%);animation:glowBreath 6s ease-in-out infinite}
+.bg-glow2{position:fixed;top:30%;left:70%;width:350px;height:350px;background:radial-gradient(circle,rgba(169,198,255,0.22) 0%,rgba(169,198,255,0.075) 30%,transparent 60%);pointer-events:none;z-index:0;filter:blur(55px);transform:translate(-50%,-50%);animation:glowWobble 9s ease-in-out infinite}
+.bg-glow3{position:fixed;top:75%;left:15%;width:280px;height:280px;background:radial-gradient(circle,rgba(169,130,255,0.22) 0%,rgba(169,130,255,0.06) 30%,transparent 60%);pointer-events:none;z-index:0;filter:blur(50px);transform:translate(-50%,-50%);animation:glowDrift 11s ease-in-out infinite}
+.star-glow{position:fixed;pointer-events:none;z-index:0;font-size:20px;image-rendering:pixelated;color:#fff;text-shadow:0 0 10px rgba(255,255,255,0.8),0 0 20px rgba(169,198,255,0.4)}
+.star1{top:10%;left:20%;animation:starTwinkle 7s ease-in-out infinite}
+.star2{top:40%;left:80%;animation:starTwinkle 9s ease-in-out infinite 2s}
+.star3{top:70%;left:50%;animation:starTwinkle 11s ease-in-out infinite 4s}
+@keyframes starTwinkle{0%,100%{opacity:0;transform:scale(0.5)}10%{opacity:1;transform:scale(1.2)}20%{opacity:0;transform:scale(0.8)}30%{opacity:0.6;transform:scale(1)}40%{opacity:0}}
 @keyframes glowBreath{0%,100%{transform:translate(-50%,-50%) scale(1)}33%{transform:translate(-50%,-50%) scale(1.08)}66%{transform:translate(-50%,-50%) scale(0.95)}}
 @keyframes glowWobble{0%,100%{transform:translate(-50%,-50%) translate(0,0)}25%{transform:translate(-50%,-50%) translate(40px,-35px)}50%{transform:translate(-50%,-50%) translate(-30px,40px)}75%{transform:translate(-50%,-50%) translate(20px,30px)}}
 @keyframes glowDrift{0%,100%{transform:translate(-50%,-50%) translate(0,0)}20%{transform:translate(-50%,-50%) translate(-35px,-25px)}40%{transform:translate(-50%,-50%) translate(30px,35px)}60%{transform:translate(-50%,-50%) translate(25px,-30px)}80%{transform:translate(-50%,-50%) translate(-20px,20px)}}
@@ -53,8 +58,8 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
 #noBtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #1b1030,inset 0 1px 0 rgba(255,255,255,0.4)}
 @keyframes wobble{0%{transform:rotate(0)}25%{transform:rotate(-1deg)}50%{transform:rotate(1deg)}75%{transform:rotate(-1deg)}100%{transform:rotate(0)}}
 .wobble{animation:wobble .35s steps(4)}
-@keyframes yipeeBlink{0%,88%{opacity:1}92%{opacity:0.35}96%{opacity:1}100%{opacity:1}}
-.yipee{font-family:'Silkscreen',var(--font-pixel);font-size:clamp(22px, 8vw, 34px);line-height:1.1;display:block;opacity:1 !important;position:relative;z-index:3;color:#ffffff !important;-webkit-text-fill-color:#ffffff;text-shadow:2px 2px 0 #1b1030,0 0 12px rgba(169,198,255,0.6);animation:yipeeBlink 2.2s ease infinite}
+@keyframes yipeeBlink{0%,92%{opacity:1}96%{opacity:0.4}100%{opacity:1}}
+.yipee{font-family:'Silkscreen',var(--font-pixel);font-size:clamp(24px,8.5vw,36px);line-height:1.1;display:block;opacity:1 !important;position:relative;z-index:3;color:#ffffff !important;-webkit-text-fill-color:#ffffff;text-shadow:2px 2px 0 #1b1030,0 0 16px rgba(169,198,255,0.8);animation:yipeeBlink 3.5s ease infinite}
 @media (max-width:500px){.yipee{font-size:28px;text-shadow:3px 3px 0 #1b1030,0 0 12px rgba(169,198,255,0.6)}}
 .extra-yes{position:fixed;z-index:45;background:var(--primary);color:var(--primary-text);border:3px solid #1b1030;box-shadow:2px 2px 0 #1b1030;transform:translate(-50%, -50%);animation:popIn .2s steps(4) forwards;font-family:var(--font-pixel);font-size:8px;border-radius:0;image-rendering:pixelated}
 .extra-yes:hover{background:var(--primary-hover);transform:translate(calc(-50% + 1px),calc(-50% + 1px));box-shadow:1px 1px 0 #1b1030}
@@ -97,6 +102,9 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
 <div class="bg-glow"></div>
 <div class="bg-glow2"></div>
 <div class="bg-glow3"></div>
+<div class="star-glow star1">★</div>
+<div class="star-glow star2">★</div>
+<div class="star-glow star3">★</div>
 <div class="bg-vignette"></div>
 <div class="bg-dots"></div>
 <div class="clouds-layer" aria-hidden="true"><div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div><div class="cloud c4"></div><div class="cloud c5"></div><div class="cloud c6"></div><div class="cloud c7"></div></div>
@@ -116,7 +124,7 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
 
   <section class="section hidden" id="sec2">
     <img src="assets/potz.gif" alt="potz" class="gif" width="200" height="200" loading="eager" decoding="async" style="width:200px;height:200px;display:block;margin:0 auto 12px;image-rendering:auto;pointer-events:none">
-    <h1 class="yipee">yipee</h1>
+    <h1 class="yipee">TOTOO BA TO??</h1>
     <button id="planDateBtn" class="btn" type="button">Plan the date</button>
   </section>
 
