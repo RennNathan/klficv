@@ -54,13 +54,13 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 #confettiCanvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:99;display:none;image-rendering:pixelated}
 #confettiCanvas.active{display:block}
-.btn:focus-visible{outline:2px solid #a9c6ff;outline-offset:2px}
+.btn-primary{background:var(--primary);color:var(--primary-text)}.btn-primary:hover{background:var(--primary-hover);transform:translate(-1px,-1px);box-shadow:4px 4px 0 #1b1030,inset 0 1px 0 rgba(255,255,255,0.4)}.btn-primary:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #1b1030,inset 0 1px 0 rgba(255,255,255,0.4)}.btn-secondary{background:var(--secondary-bg);color:#d8d4f0;max-width:200px}.btn-secondary:hover{background:#251a4a;transform:translate(-1px,-1px);box-shadow:4px 4px 0 #1b1030,inset 0 1px 0 rgba(255,255,255,0.4)}.btn-secondary:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #1b1030,inset 0 1px 0 rgba(255,255,255,0.4)}.btn:focus-visible{outline:2px solid #a9c6ff;outline-offset:2px}
 .music-hint{position:fixed;bottom:56px;right:14px;background:#1b1030;color:#fff;border:2px solid #a9c6ff;border-radius:999px;padding:6px 12px;font-family:Silkscreen;font-size:11px;z-index:50;animation:hintPulse 1.2s infinite alternate;box-shadow:2px 2px 0 #1b1030;cursor:pointer}
 @keyframes hintPulse{from{transform:scale(1)}to{transform:scale(1.06)}}
 .music-hint.hidden{opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity 0.35s,transform 0.35s}
 @media (max-width:430px){.section{padding-top:8vh}}
 .date-field{width:100%;display:flex;flex-direction:column;gap:8px;align-items:center}
-#dateInput{width:min(280px,90vw);margin:16px 0 14px;height:44px;border:3px solid #1a1330;background:#fff;color:var(--text);font-family:'Silkscreen',monospace;font-size:10px;text-align:center;outline:none;-webkit-appearance:none;appearance:none;padding:8px 10px}
+#dateInput{width:min(280px,90vw);margin:16px 0 14px;height:44px;border:3px solid #1a1330;background:#fff;color:#1b1030;font-family:'Silkscreen',monospace;font-size:10px;text-align:center;outline:none;-webkit-appearance:none;appearance:none;padding:8px 10px}
 #dateInput:focus{border:2px dashed #8a7dff;box-shadow:3px 3px 0 #2a2050}
 .selected-display{font-family:'Silkscreen',monospace;font-size:12px;line-height:1.5;color:#1b1030;background:#e8e9ff;border:3px solid #1a1330;box-shadow:3px 3px 0 #2a2050;padding:7px 10px;width:100%;max-width:min(280px,90vw);word-break:break-word}
 .overlay{position:fixed;inset:0;background:rgba(14,10,31,0.78);display:flex;align-items:center;justify-content:center;padding:20px 12px;opacity:0;pointer-events:none;transition:opacity .2s steps(4);z-index:100}
