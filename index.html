@@ -74,7 +74,7 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
 </style>
 </head>
 <body>
-<audio id="bgMusic" src="assets/silly-cat.mp3" loop preload="auto" style="display:none"></audio>
+<audio id="bgMusic" src="assets/silly-cat.mp3" loop autoplay preload="auto" style="display:none"></audio>
 <button id="soundBtn" style="position:fixed;bottom:12px;left:12px;z-index:99;font-family:var(--font-pixel);font-size:10px;padding:6px 10px;border:2px solid #1b1030;box-shadow:2px 2px 0 #1b1030;background:#fff">🔊 Sound ON</button>
 <div class="clouds-layer" aria-hidden="true"><div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div><div class="cloud c4"></div><div class="cloud c5"></div><div class="cloud c6"></div><div class="cloud c7"></div></div>
 <div class="hearts-layer" aria-hidden="true" id="heartsLayer"></div>
@@ -102,7 +102,7 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
 (function(){
   function initBg(){const bg=document.getElementById('bgMusic');const btn=document.getElementById('soundBtn');if(!bg)return()=>{};bg.muted=false;bg.volume=0.6;bg.loop=true;bg.preload='auto';function updateBtn(){if(btn)btn.textContent=bg.paused?'🔊 Sound OFF':'🔊 Sound ON';}
 const saved=sessionStorage.getItem('bgTime');if(saved)try{bg.currentTime=parseFloat(saved);}catch(e){}
-if(sessionStorage.getItem('bgPlaying')===null)sessionStorage.setItem('bgPlaying','1');const wasPlaying=sessionStorage.getItem('bgPlaying')==='1';if(wasPlaying){bg.play().then(updateBtn).catch(()=>{});updateBtn();}else updateBtn();
+try{if(!localStorage.getItem('soundFixV2')){sessionStorage.setItem('bgPlaying','1');localStorage.setItem('soundFixV2','1');}}catch(e){}if(sessionStorage.getItem('bgPlaying')===null)sessionStorage.setItem('bgPlaying','1');const wasPlaying=sessionStorage.getItem('bgPlaying')==='1';if(wasPlaying){bg.play().then(updateBtn).catch(()=>{});updateBtn();}else updateBtn();
 function tryPlay(){bg.muted=false;if(ctx&&ctx.state==='suspended')ctx.resume().catch(()=>{});if(bg.paused) return bg.play().then(()=>{sessionStorage.setItem('bgPlaying','1');updateBtn();}).catch(e=>{console.log('[bgMusic] play blocked',e);});}
 document.addEventListener('click',tryPlay,{once:true});document.addEventListener('touchstart',tryPlay,{once:true});
 setInterval(()=>{if(!bg.paused)sessionStorage.setItem('bgTime',bg.currentTime)},500);
