@@ -11,14 +11,14 @@
 html{-webkit-tap-highlight-color:transparent}
 body{min-height:100dvh;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#1b1030 0%,#0e0a1f 55%,#070612 100%);background-color:#0e0a1f;font-family:'Silkscreen',monospace;color:#fff;position:relative;overflow-x:hidden}
 .clouds-layer{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-@keyframes cloudInLeft{from{transform:translateX(-120vw)}to{transform:translateX(0)}}
-@keyframes cloudInRight{from{transform:translateX(120vw)}to{transform:translateX(0)}}
-.cloud{position:absolute;background:#fff;will-change:transform}
-.cloud:nth-child(odd){animation:cloudInLeft 0.6s ease-out both}
-.cloud:nth-child(even){animation:cloudInRight 0.6s ease-out both}
+@keyframes cloudInLeft{from{transform:translateX(-120vw);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes cloudInRight{from{transform:translateX(120vw);opacity:0}to{transform:translateX(0);opacity:1}}
+.cloud{position:absolute;background:#fff;will-change:transform;opacity:0;transform:translateX(-120vw)}
+.cloud:nth-child(odd){animation:cloudInLeft 0.65s 0.1s ease-out forwards}
+.cloud:nth-child(even){animation:cloudInRight 0.65s 0.1s ease-out forwards}
 .c1,.c2,.c3,.c7{animation-name:cloudInLeft}
-.c4,.c5,.c6{animation-name:cloudInRight}
-.cloud.cloud-enter{transform:translateX(0)}
+.c4,.c5,.c6{animation-name:cloudInRight;transform:translateX(120vw)}
+.cloud.cloud-enter{transform:translateX(0);opacity:1}
 .cloud.cloud-exit{animation:none !important;transition:transform 0.6s ease-in;will-change:transform}
 .wrap.content-exit{opacity:0;transform:translateY(14px);transition:opacity 0.45s ease,transform 0.45s ease}
 .c1{left:6%;top:22%;width:12px;height:12px;box-shadow:12px 0 #fff,24px 0 #fff,36px 0 #fff,48px 0 #fff,60px 0 #fff,0 12px #fff,12px 12px #fff,24px 12px #fff,36px 12px #fff,48px 12px #fff,60px 12px #fff,12px 24px #ddd0ff,24px 24px #ddd0ff,36px 24px #ddd0ff,48px 24px #ddd0ff,12px -12px #fff,24px -12px #fff,36px -12px #fff}
