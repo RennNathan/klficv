@@ -103,6 +103,8 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
   let ctx;function tone(freq,dur,type,vol){try{ctx=ctx||new(window.AudioContext||window.webkitAudioContext)();if(ctx.state==='suspended')ctx.resume();let o=ctx.createOscillator(),g=ctx.createGain();o.type=type||'sine';o.frequency.value=freq;g.gain.value=vol||0.3;o.connect(g);g.connect(ctx.destination);g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+dur);o.start();o.stop(ctx.currentTime+dur);}catch(e){}}
   function woosh(){try{let f=600+Math.random()*400;ctx=ctx||new(window.AudioContext||window.webkitAudioContext)();if(ctx.state==='suspended')ctx.resume();let o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=f;o.frequency.linearRampToValueAtTime(f+300,ctx.currentTime+0.15);g.gain.value=0.2;g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+0.15);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+0.15);}catch(e){}}
   function chime(){try{tone(523,0.3,'sine',0.3);setTimeout(function(){tone(659,0.3,'sine',0.3)},100);setTimeout(function(){tone(784,0.5,'sine',0.3)},200);}catch(e){}}
+  let _yippeePreload=null;function preloadYippee(){try{if(!_yippeePreload){_yippeePreload=new Audio('assets/yippee-tbh.mp3');_yippeePreload.preload='auto';_yippeePreload.volume=0.6;_yippeePreload.load();}}catch(e){}}
+  document.addEventListener('click',preloadYippee,{once:true});document.addEventListener('touchstart',preloadYippee,{once:true,passive:true});
   const canvas=document.getElementById('confettiCanvas');
   const heartsLayer=document.getElementById('heartsLayer');
   const heartsColors=['#ffffff','#ffffff','#a9c6ff','#d7cfff','#8a7dff'];
@@ -159,7 +161,7 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
     }
     if(confettiRAF)cancelAnimationFrame(confettiRAF);confettiRAF=requestAnimationFrame(frame);
   }
-    function openSuccess(){overlay.classList.add('open');try{chime();}catch(e){try{tone(523,0.3,'sine',0.3);setTimeout(function(){tone(659,0.3,'sine',0.3)},100);setTimeout(function(){tone(784,0.5,'sine',0.3)},200);}catch(e2){}}launchConfetti();}
+    function openSuccess(){overlay.classList.add('open');try{let yippee=new Audio('assets/yippee-tbh.mp3');yippee.volume=0.6;yippee.currentTime=0;yippee.play().catch(function(){});}catch(e){}launchConfetti();}
   yesBtn.addEventListener('click',openSuccess);
   closeOverlay.addEventListener('click',()=>{document.body.classList.add('page-exit');setTimeout(()=>{location.href='page2.html';},450);});
   if(overlayX)overlayX.addEventListener('click',()=>overlay.classList.remove('open'));
