@@ -38,15 +38,19 @@ body{
 h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spacing:0.01em;color:#ffffff;font-family:var(--font-pixel);image-rendering:pixelated;text-wrap:balance;text-align:center;max-width:320px;text-shadow:0 1px 6px rgba(14,10,31,0.5)}
 .subtitle{font-size:clamp(11px,3.2vw,13px);color:#c9c0e8;opacity:0.85;letter-spacing:0.01em;line-height:1.4;font-family:var(--font-pixel);text-align:center;margin-top:8px;max-width:320px}
 .actions{display:flex;gap:12px;justify-content:center;align-items:center;width:100%;padding-top:16px}
-.btn{width:120px;height:44px;border-radius:0;font-size:clamp(12px,3.2vw,14px);font-family:var(--font-pixel);font-weight:400;cursor:pointer;border:3px solid #1b1030;display:inline-flex;align-items:center;justify-content:center;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation;transition:transform .08s steps(2),box-shadow .08s steps(2);flex-shrink:0;box-shadow:2px 2px 0 #1b1030;line-height:1.2;text-align:center;image-rendering:pixelated;letter-spacing:0.01em}
-#yesBtn{background:var(--primary);color:var(--primary-text);box-shadow:2px 2px 0 #1b1030}
-#yesBtn:hover{background:var(--primary-hover);transform:translate(1px,1px);box-shadow:1px 1px 0 #1b1030}
-#yesBtn:active{transform:translate(2px,2px);box-shadow:none}
-#noBtn{width:120px;height:44px;background:var(--secondary-bg);color:#ffffff;border-color:#1b1030;box-shadow:2px 2px 0 #1b1030}
-#noBtn:hover{border-color:#1b1030;transform:translate(1px,1px);box-shadow:1px 1px 0 #1b1030}
-#noBtn:active{transform:translate(2px,2px);box-shadow:none}
+.btn{width:auto;border-radius:0;font-size:12px;font-family:'Silkscreen',var(--font-pixel);font-weight:400;cursor:pointer;border:3px solid #1b1030;display:inline-flex;align-items:center;justify-content:center;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation;transition:transform .08s steps(2),box-shadow .08s steps(2);flex-shrink:0;box-shadow: 3px 3px 0 #1b1030,inset 0 1px 0 rgba(255,255,255,0.4);line-height:1.2;text-align:center;image-rendering:pixelated;letter-spacing:0.01em;padding:10px 18px}
+#yesBtn{background:var(--primary);color:var(--primary-text);box-shadow: 3px 3px 0 #1b1030,inset 0 1px 0 rgba(255,255,255,0.4)}
+#yesBtn:hover{background:var(--primary-hover);transform:translate(-1px,-1px);box-shadow:4px 4px 0 #1b1030,inset 0 1px 0 rgba(255,255,255,0.4)}
+#yesBtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #1b1030,inset 0 1px 0 rgba(255,255,255,0.4)}
+#noBtn{background:var(--secondary-bg);color:#ffffff;border-color:#1b1030;box-shadow: 3px 3px 0 #1b1030,inset 0 1px 0 rgba(255,255,255,0.4)}
+#noBtn:hover{border-color:#1b1030;transform:translate(-1px,-1px);box-shadow:4px 4px 0 #1b1030,inset 0 1px 0 rgba(255,255,255,0.4)}
+#noBtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #1b1030,inset 0 1px 0 rgba(255,255,255,0.4)}
 @keyframes wobble{0%{transform:rotate(0)}25%{transform:rotate(-1deg)}50%{transform:rotate(1deg)}75%{transform:rotate(-1deg)}100%{transform:rotate(0)}}
 .wobble{animation:wobble .35s steps(4)}
+@keyframes yipeeBlink{0%,45%{opacity:1}50%,85%{opacity:0.35}100%{opacity:1}}
+.yipee{font-family:'Silkscreen',var(--font-pixel);font-size:22px;color:#1b1030;text-align:center;animation:yipeeBlink 1.8s ease infinite}
+.cloud.cloud-exit{transition:transform 0.6s ease-in}
+.wrap.content-exit{opacity:0;transform:translateY(14px);transition:opacity 0.45s ease,transform 0.45s ease}
 @keyframes popIn{0%{transform:translate(-50%,-50%) scale(.85);opacity:0}100%{transform:translate(-50%,-50%) scale(1);opacity:1}}
 .extra-yes{position:fixed;z-index:45;background:var(--primary);color:var(--primary-text);border:3px solid #1b1030;box-shadow:2px 2px 0 #1b1030;transform:translate(-50%,-50%);animation:popIn .2s steps(4) forwards;font-family:var(--font-pixel);font-size:8px;border-radius:0;image-rendering:pixelated}
 .extra-yes:hover{background:var(--primary-hover);transform:translate(calc(-50% + 1px),calc(-50% + 1px));box-shadow:1px 1px 0 #1b1030}
@@ -66,6 +70,7 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
 #confettiCanvas.active{display:block}
 @media (max-width:430px){.wrap{padding-top:8vh}}
 .btn:focus-visible{outline:2px solid #a9c6ff;outline-offset:2px}
+/* box-shadow 3px 3px check */
 </style>
 </head>
 <body>
@@ -85,8 +90,7 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
   <div class="overlay-card">
     <button class="overlay-close" id="overlayX" aria-label="Close">X</button>
     <div style="font-size:22px;line-height:1;image-rendering:pixelated">♥</div>
-    <h2>Yay! You made my day</h2>
-    <p>I knew you would say yes! Can't wait for what is next.</p>
+    <h2 class="yipee">yipee</h2>
     <button id="closeOverlay" class="btn" type="button" aria-label="Continue to next page" style="background:var(--primary);color:var(--primary-text);">Continue -></button>
   </div>
 </div>
@@ -161,7 +165,7 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
     }
     if(confettiRAF)cancelAnimationFrame(confettiRAF);confettiRAF=requestAnimationFrame(frame);
   }
-    function openSuccess(){overlay.classList.add('open');try{let yippee=new Audio('assets/yippee-tbh.mp3');yippee.volume=0.6;yippee.currentTime=0;yippee.play().catch(function(){});}catch(e){}launchConfetti();}
+    function openSuccess(){try{let yippee=new Audio('assets/yippee-tbh.mp3');yippee.volume=0.6;yippee.currentTime=0;yippee.play().catch(function(){});}catch(e){}launchConfetti();document.querySelectorAll('.cloud').forEach(function(c){var r=c.getBoundingClientRect();if(r.left < innerWidth/2)c.classList.add('cloud-exit'),c.style.transform='translateX(-120vw)';else c.classList.add('cloud-exit'),c.style.transform='translateX(120vw)';c.style.transition='transform 0.6s ease-in';});var w=document.querySelector('.wrap');if(w){w.classList.add('content-exit');w.style.opacity='0';w.style.transform='translateY(14px)';w.style.transition='opacity 0.45s ease,transform 0.45s ease';}setTimeout(function(){location.href='page2.html';},600);}
   yesBtn.addEventListener('click',openSuccess);
   closeOverlay.addEventListener('click',()=>{document.body.classList.add('page-exit');setTimeout(()=>{location.href='page2.html';},450);});
   if(overlayX)overlayX.addEventListener('click',()=>overlay.classList.remove('open'));
