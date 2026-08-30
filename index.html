@@ -42,8 +42,8 @@ body.unlocked{overflow-y:auto}
 @keyframes floatUp{0%{transform:translateY(110vh) rotate(var(--rot-start)) scale(0.9);opacity:0}12%{opacity:0.55}55%{opacity:0.5}88%{opacity:0.5}100%{transform:translateY(-15vh) rotate(var(--rot-end)) scale(1.05);opacity:0}}
 #scrollRoot{flex:1;overflow-y:hidden;position:relative;z-index:2}
 @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.section{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;position:absolute;inset:0;text-align:center;animation:fadeInUp 0.5s ease both}
-.section.hidden{visibility:hidden;pointer-events:none}
+.section{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;position:absolute;inset:0;text-align:center;animation:fadeInUp 0.5s ease both;transition:opacity 0.35s ease}
+.section.hidden{opacity:0;pointer-events:none}
  .overlay-close{background:none;border:3px solid #1b1030;color:#1b1030;font-family:var(--font-pixel);font-size:14px;cursor:pointer;box-shadow:2px 2px 0 #1b1030;padding:4px 10px;image-rendering:pixelated}
  .overlay-close:hover{background:#1b1030;color:#fff}
   .gif{image-rendering:pixelated !important;mix-blend-mode:normal !important}
