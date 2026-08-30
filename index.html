@@ -214,7 +214,10 @@ function spaGo(url){
       document.querySelectorAll('.cloud').forEach(function(c){c.classList.add('cloud-enter');c.style.transform='translateX(0)';});
       var w=document.querySelector('.wrap'); if(w) w.classList.add('page-in');
     });});
-  }).catch(function(){location.href=url});
+    clearTimeout(_navTimeout);
+  }).catch(function(){clearTimeout(_navTimeout);location.href=url;});
+}
+var _navTimeout=setTimeout(function(){location.href=url;},8000);
 },()=>{location.reload();});
 </script>
 
