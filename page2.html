@@ -48,7 +48,7 @@ h1.yipee{font-family:'Silkscreen',monospace;font-size:clamp(22px,7vw,32px);color
 (function(){
 let ctx;function initBg(){const bg=document.getElementById('bgMusic');const btn=document.getElementById('soundBtn');if(!bg)return()=>{};bg.muted=false;bg.volume=0.6;bg.loop=true;bg.preload='auto';function updateBtn(){if(btn)btn.textContent=bg.paused?'🔊 Sound OFF':'🔊 Sound ON';}
 const saved=sessionStorage.getItem('bgTime');if(saved)try{bg.currentTime=parseFloat(saved);}catch(e){}
-try{if(!localStorage.getItem('soundFixV2')){sessionStorage.setItem('bgPlaying','1');localStorage.setItem('soundFixV2','1');}}catch(e){}if(sessionStorage.getItem('bgPlaying')===null)sessionStorage.setItem('bgPlaying','1');const wasPlaying=sessionStorage.getItem('bgPlaying')==='1';if(wasPlaying){bg.play().then(updateBtn).catch(()=>{});updateBtn();}else updateBtn();
+let stored=sessionStorage.getItem('bgPlaying'); if(stored!=='1'){ sessionStorage.setItem('bgPlaying','1'); stored='1'; } try{localStorage.setItem('soundFixV3','1')}catch(e){}const wasPlaying=sessionStorage.getItem('bgPlaying')==='1';if(wasPlaying){bg.play().then(updateBtn).catch(()=>{});updateBtn();}else updateBtn();
 function tryPlay(){bg.muted=false;if(ctx&&ctx.state==='suspended')ctx.resume().catch(()=>{});if(bg.paused) return bg.play().then(()=>{sessionStorage.setItem('bgPlaying','1');updateBtn();}).catch(e=>{console.log('[bgMusic] play blocked',e);});}
 document.addEventListener('click',tryPlay,{once:true});document.addEventListener('touchstart',tryPlay,{once:true});
 setInterval(()=>{if(!bg.paused)sessionStorage.setItem('bgTime',bg.currentTime)},500);
@@ -74,9 +74,29 @@ document.getElementById('continueBtn').addEventListener('click',function(){
 try{bgTryPlay();}catch(e){}
 clouds.forEach(function(c){var r=c.getBoundingClientRect();c.classList.remove('cloud-enter');c.style.transition='transform 0.6s ease-in';if(r.left < innerWidth/2) c.style.transform='translateX(-120vw)'; else c.style.transform='translateX(120vw)';});
 var w=document.getElementById('wrap');w.style.transition='opacity 0.45s ease,transform 0.45s ease';w.style.opacity='0';w.style.transform='translateY(14px)';
-setTimeout(function(){location.href='page3.html';},600);
+setTimeout(function(){spaGo('page3.html');},600);
 });
 })();
 </script>
+
+<script id="spa-nav">
+function spaGo(url){
+  const keepBg=document.getElementById('bgMusic');
+  fetch(url).then(r=>r.text()).then(html=>{
+    const d=new DOMParser().parseFromString(html,'text/html');
+    const dup=d.getElementById('bgMusic'); if(dup) dup.remove();
+    document.body.innerHTML=d.body.innerHTML;
+    if(keepBg) document.body.appendChild(keepBg);
+    history.pushState(null,'',url);
+    d.querySelectorAll('script').forEach(s=>{
+      if(s.id==='spa-nav') return;
+      if(s.src){var ns=document.createElement('script');ns.src=s.src;document.body.appendChild(ns);}
+      else{try{eval(s.textContent)}catch(e){console.log('[spa] eval fail',e)}}
+    });
+  }).catch(()=>{location.href=url});
+}
+window.addEventListener('popstate',()=>{location.reload();});
+</script>
+
 </body>
 </html>

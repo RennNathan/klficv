@@ -94,7 +94,7 @@ h1{font-family:'Silkscreen',monospace;font-size:clamp(18px,5.5vw,24px);line-heig
 (function(){
 function initBg(){const bg=document.getElementById('bgMusic');const btn=document.getElementById('soundBtn');if(!bg)return()=>{};bg.muted=false;bg.volume=0.6;bg.loop=true;bg.preload='auto';function updateBtn(){if(btn)btn.textContent=bg.paused?'🔊 Sound OFF':'🔊 Sound ON';}
 const saved=sessionStorage.getItem('bgTime');if(saved)try{bg.currentTime=parseFloat(saved);}catch(e){}
-try{if(!localStorage.getItem('soundFixV2')){sessionStorage.setItem('bgPlaying','1');localStorage.setItem('soundFixV2','1');}}catch(e){}if(sessionStorage.getItem('bgPlaying')===null)sessionStorage.setItem('bgPlaying','1');const wasPlaying=sessionStorage.getItem('bgPlaying')==='1';if(wasPlaying){bg.play().then(updateBtn).catch(()=>{});updateBtn();}else updateBtn();
+let stored=sessionStorage.getItem('bgPlaying'); if(stored!=='1'){ sessionStorage.setItem('bgPlaying','1'); stored='1'; } try{localStorage.setItem('soundFixV3','1')}catch(e){}const wasPlaying=sessionStorage.getItem('bgPlaying')==='1';if(wasPlaying){bg.play().then(updateBtn).catch(()=>{});updateBtn();}else updateBtn();
 function tryPlay(){bg.muted=false;if(ctx&&ctx.state==='suspended')ctx.resume().catch(()=>{});if(bg.paused) return bg.play().then(()=>{sessionStorage.setItem('bgPlaying','1');updateBtn();}).catch(e=>{console.log('[bgMusic] play blocked',e);});}
 document.addEventListener('click',tryPlay,{once:true});document.addEventListener('touchstart',tryPlay,{once:true});
 setInterval(()=>{if(!bg.paused)sessionStorage.setItem('bgTime',bg.currentTime)},500);
@@ -156,5 +156,25 @@ maybeOverlay.addEventListener('click',function(e){if(e.target===maybeOverlay)may
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){overlay.classList.remove('open');maybeOverlay.classList.remove('open')}});
 })();
 </script>
+
+<script id="spa-nav">
+function spaGo(url){
+  const keepBg=document.getElementById('bgMusic');
+  fetch(url).then(r=>r.text()).then(html=>{
+    const d=new DOMParser().parseFromString(html,'text/html');
+    const dup=d.getElementById('bgMusic'); if(dup) dup.remove();
+    document.body.innerHTML=d.body.innerHTML;
+    if(keepBg) document.body.appendChild(keepBg);
+    history.pushState(null,'',url);
+    d.querySelectorAll('script').forEach(s=>{
+      if(s.id==='spa-nav') return;
+      if(s.src){var ns=document.createElement('script');ns.src=s.src;document.body.appendChild(ns);}
+      else{try{eval(s.textContent)}catch(e){console.log('[spa] eval fail',e)}}
+    });
+  }).catch(()=>{location.href=url});
+}
+window.addEventListener('popstate',()=>{location.reload();});
+</script>
+
 </body>
 </html>
