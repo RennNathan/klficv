@@ -18,7 +18,7 @@ body{
  position:relative;overflow-x:hidden;transition:opacity .2s steps(4),transform .2s steps(4);touch-action:manipulation;
  image-rendering:pixelated;letter-spacing:0.02em;
 }
-body.page-exit{opacity:0;transform:translateY(8px)}
+@keyframes pageIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}body{animation:pageIn 0.45s ease}body.page-exit{opacity:0;transform:translateY(14px);transition:opacity 0.45s ease,transform 0.45s ease}
 .clouds-layer{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
 .cloud{position:absolute;background:#FFFFFF;image-rendering:pixelated;box-shadow:0 4px 0 #ddd0ff;animation:cloudDrift 8s ease-in-out infinite alternate}
 .c1{left:6%;top:22%;width:12px;height:12px;box-shadow:12px 0 #FFFFFF,24px 0 #FFFFFF,36px 0 #FFFFFF,48px 0 #FFFFFF,60px 0 #FFFFFF,0 12px #FFFFFF,12px 12px #FFFFFF,24px 12px #FFFFFF,36px 12px #FFFFFF,48px 12px #FFFFFF,60px 12px #FFFFFF,12px 24px #ddd0ff,24px 24px #ddd0ff,36px 24px #ddd0ff,48px 24px #ddd0ff,12px -12px #FFFFFF,24px -12px #FFFFFF,36px -12px #FFFFFF}
@@ -77,7 +77,7 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
   <p class="subtitle">No pressure -- your answer is safe with me</p>
   <img src="assets/plead.gif" id="pleadGif" style="width:80px;display:block;margin:14px auto 6px;mix-blend-mode:lighten;pointer-events:none">
   <div class="actions">
-    <button id="yesBtn" class="btn" type="button" aria-label="Yes">Yes</button>
+    <button id="yesBtn" class="btn" type="button" aria-label="Yes">Yada</button>
     <button id="noBtn" class="btn" type="button" aria-label="No">No</button>
   </div>
   <div id="belowRow" style="display:flex;gap:12px;justify-content:center;align-items:flex-start;width:min(320px,90vw);margin:14px auto 0"><div style="flex:1;display:flex;justify-content:center"><img src="assets/beg-crying.gif" id="begGif" style="width:120px;max-width:100%;border:3px solid #1b1030;box-shadow:2px 2px 0 #1b1030"></div><div style="flex:1;display:flex;flex-direction:column;align-items:center"><img id="photoSwitch" src="assets/p1.webp" style="width:120px;height:120px;object-fit:cover;border:3px solid #1b1030;display:block"></div></div>
@@ -91,7 +91,6 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
     <button id="closeOverlay" class="btn" type="button" aria-label="Continue to next page" style="background:var(--primary);color:var(--primary-text);">Continue -></button>
   </div>
 </div>
-<img id="catJump" src="assets/cat-jump.gif" style="display:none;position:fixed;right:6vw;bottom:8vh;width:140px;z-index:101;pointer-events:none;mix-blend-mode:lighten;image-rendering:auto">
 <canvas id="confettiCanvas"></canvas>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <script>
@@ -108,10 +107,10 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
   const heartsChars=['\u2665','\u2764'];
   const heartsCount=16;
   for(let i=0;i<heartsCount;i++){const el=document.createElement('span');el.textContent=heartsChars[Math.floor(Math.random()*heartsChars.length)];const size=(16+Math.random()*12).toFixed(1);el.style.fontSize=size+'px';el.style.left=(Math.random()*100).toFixed(2)+'%';el.style.color=heartsColors[Math.floor(Math.random()*heartsColors.length)];el.style.opacity=(0.60+Math.random()*0.15).toFixed(2);const dur=(10+Math.random()*6).toFixed(2);el.style.animationDuration=dur+'s';el.style.animationDelay=(Math.random()*8).toFixed(2)+'s';const rotStart=(-18+Math.random()*10).toFixed(1)+'deg';const rotEnd=(8+Math.random()*14).toFixed(1)+'deg';el.style.setProperty('--rot-start',rotStart);el.style.setProperty('--rot-end',rotEnd);heartsLayer.appendChild(el);}
-  const noTexts=["No","Are you sure?","Really sure?","Think again? \uD83E\uDD14","Are you really sure??","Maybe? \uD83D\uDC40","Maybe later?","Maybe...?","Hmm... \uD83E\uDD28","Not sure? \uD83D\uDE0F","U sure? \uD83E\uDD7A","Please? \uD83D\uDE4F","Give Yes a chance? \uD83D\uDE0A","Don't do this to me \uD83D\uDE22","Last chance! \uD83D\uDE2C","Think twice! \uD83D\uDCAD","Surely Maybe? \uD83D\uDE09","Yes is waiting... \u2764\uFE0F","Maaaaybe? \uD83E\uDD79","Okay, maybe another time..."];
+   const noTexts=["Nada","Sure na?","Weeh??","Are u lying?","Totoo na ba 'yan?","☹️"];
    let noIndex=0, noClickCount=0, totalSpawned=0;
   const spawnedPositions=[];
-  const yesTexts=["Yes","Yes \u2764\uFE0F","Yes!!","Of course!","Absolutely","Yesss!","Sure!","Yess!! \u2764\uFE0F","Definitely!","Yes yes!","Okay! \u2764\uFE0F","Yup!"];
+   const yesTexts=["Yada","Yup","Yis","Yes","Absutuliti"];
   let photoIdx=0;const photoImgs=['assets/p1.webp','assets/p2.webp','assets/p3.webp','assets/p4.webp','assets/p5.webp','assets/p6.webp','assets/p7.webp','assets/p8.webp'];
   function showToast(msg){toast.textContent=msg;toast.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(()=>toast.classList.remove('show'),1800);}
   function getNoText(idx){return noTexts[idx%noTexts.length];}
@@ -158,7 +157,7 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
     }
     if(confettiRAF)cancelAnimationFrame(confettiRAF);confettiRAF=requestAnimationFrame(frame);
   }
-   function openSuccess(){overlay.classList.add('open');launchConfetti();var cj=document.getElementById('catJump');if(cj){cj.style.display='block';cj.style.animation='popIn 0.5s';}}
+   function openSuccess(){overlay.classList.add('open');launchConfetti();}
   yesBtn.addEventListener('click',openSuccess);
   closeOverlay.addEventListener('click',()=>{document.body.classList.add('page-exit');setTimeout(()=>{location.href='page2.html';},450);});
   if(overlayX)overlayX.addEventListener('click',()=>overlay.classList.remove('open'));
