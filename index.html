@@ -40,11 +40,13 @@ body.unlocked{overflow-y:auto}
 .hearts-layer{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
 .hearts-layer span{position:absolute;bottom:-20px;user-select:none;animation:floatUp linear infinite;will-change:transform,opacity}
 @keyframes floatUp{0%{transform:translateY(110vh) rotate(var(--rot-start)) scale(0.9);opacity:0}12%{opacity:0.55}55%{opacity:0.5}88%{opacity:0.5}100%{transform:translateY(-15vh) rotate(var(--rot-end)) scale(1.05);opacity:0}}
-#scrollRoot{flex:1;overflow-y:hidden;scroll-snap-type:y mandatory;position:relative;z-index:2}
+#scrollRoot{flex:1;overflow-y:hidden;position:relative;z-index:2}
 @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.section{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;scroll-snap-align:start;position:relative;text-align:center;animation:fadeInUp 0.5s ease both}
-.section.hidden{display:none}
- .gif{image-rendering:pixelated !important;mix-blend-mode:normal !important}
+.section{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;position:absolute;inset:0;text-align:center;animation:fadeInUp 0.5s ease both}
+.section.hidden{visibility:hidden;pointer-events:none}
+ .overlay-close{background:none;border:3px solid #1b1030;color:#1b1030;font-family:var(--font-pixel);font-size:14px;cursor:pointer;box-shadow:2px 2px 0 #1b1030;padding:4px 10px;image-rendering:pixelated}
+ .overlay-close:hover{background:#1b1030;color:#fff}
+  .gif{image-rendering:pixelated !important;mix-blend-mode:normal !important}
 .gif-wrap{width:100%;max-width:280px;overflow:hidden;background:var(--bg2);border:3px solid #1b1030;box-shadow:2px 2px 0 #1b1030;line-height:0;margin-bottom:18px}
 .gif-wrap img{width:100%;height:auto;display:block;aspect-ratio:1.4/1;object-fit:cover;image-rendering:auto}
 h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spacing:0.01em;color:#ffffff;font-family:var(--font-pixel);image-rendering:pixelated;text-wrap:balance;text-align:center;max-width:320px;text-shadow:0 1px 6px rgba(14,10,31,0.5)}
@@ -127,13 +129,13 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
    </section>
 
   <section class="section hidden" id="sec3">
-    <img src="assets/cat-jump.gif" id="mainGif" class="gif" loading="eager" decoding="async" style="max-width:280px;width:min(280px,80vw);display:block;margin:0 auto 18px;border:3px solid #1b1030;box-shadow:2px 2px 0 #1b1030;image-rendering:auto" alt="nervous">
+    <img src="assets/cat-jump.gif" id="mainGifSec3" class="gif" loading="eager" decoding="async" style="max-width:280px;width:min(280px,80vw);display:block;margin:0 auto 18px;border:3px solid #1b1030;box-shadow:2px 2px 0 #1b1030;image-rendering:auto" alt="cat jump">
     <h1>Pick a day, libre ko pramis</h1>
     <div class="date-field">
       <input type="date" id="dateInput" value="2026-08-31" aria-label="Pick a date">
       <div class="selected-display" id="selectedDisplay">Selected: 08/31/2026 — Monday</div>
     </div>
-    <img id="pleadGif" src="assets/huu.gif" class="gif" loading="eager" decoding="async" style="width:80px;display:block;margin:0 auto;pointer-events:none;image-rendering:auto" alt="plead">
+    <img id="pleadGifSec3" src="assets/huu.gif" class="gif" loading="eager" decoding="async" style="width:80px;display:block;margin:0 auto;pointer-events:none;image-rendering:auto" alt="plead">
     <div class="actions">
       <button id="continueBtn" class="btn" type="button" aria-label="Continue">Continue</button>
     </div>
@@ -203,14 +205,14 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
 <script>
 (function(){
   function initBg(){const bg=document.getElementById('bgMusic');if(!bg)return()=>{};bg.muted=false;bg.volume=0.6;bg.loop=true;bg.preload='auto';const saved=sessionStorage.getItem('bgTime');if(saved)try{bg.currentTime=parseFloat(saved);}catch(e){}
- let stored=sessionStorage.getItem('bgPlaying'); if(stored!=='1'){ sessionStorage.setItem('bgPlaying','1'); stored='1'; } try{localStorage.setItem('soundFixV3','1')}catch(e){}const wasPlaying=sessionStorage.getItem('bgPlaying')==='1';if(wasPlaying){bg.play().catch(()=>{});}
+ let stored=sessionStorage.getItem('bgPlaying'); if(stored===null){ sessionStorage.setItem('bgPlaying','1'); stored='1'; } const wasPlaying=sessionStorage.getItem('bgPlaying')==='1';if(wasPlaying){bg.play().catch(()=>{});}
  function tryPlay(){bg.muted=false;if(ctx&&ctx.state==='suspended')ctx.resume().catch(()=>{});if(bg.paused) return bg.play().catch(e=>{console.log('[bgMusic] play blocked',e);});}
  document.addEventListener('click',tryPlay,{once:true});document.addEventListener('touchstart',tryPlay,{once:true});
  setInterval(()=>{if(!bg.paused)sessionStorage.setItem('bgTime',bg.currentTime)},500);
  window.addEventListener('beforeunload',()=>{sessionStorage.setItem('bgTime',bg.currentTime);sessionStorage.setItem('bgPlaying',bg.paused?'0':'1');});
  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&sessionStorage.getItem('bgPlaying')==='1'&&bg.paused)bg.play().catch(()=>{});});
   return tryPlay;}const bgTryPlay=initBg();
-   function reloadGifs(){document.querySelectorAll('.gif').forEach(function(img){var s=img.src;img.src='';img.src=s;});}
+   function reloadGifs(scope){(scope||document).querySelectorAll('.gif').forEach(function(img){img.replaceWith(img.cloneNode(true));});}
   const yesBtn=document.getElementById('yesBtn');
   const noBtn=document.getElementById('noBtn');
   const overlay=document.getElementById('overlay');
@@ -347,7 +349,7 @@ ionKnowBtn.addEventListener('click',function(){try{tone(400,0.12,'square',0.15);
     continueBtn.addEventListener('click',function(){try{bgTryPlay();tone(400,0.12,'square',0.15);}catch(e){}sec3.classList.add('hidden');sec4.classList.remove('hidden');reloadGifs();});
     sec4Continue.addEventListener('click',function(){try{bgTryPlay();tone(400,0.12,'square',0.15);}catch(e){}sec4.classList.add('hidden');sec5.classList.remove('hidden');reloadGifs();});
     sec5Submit.addEventListener('click',function(){try{bgTryPlay();if(typeof ctx!=='undefined'&&ctx&&ctx.state==='suspended')ctx.resume().catch(()=>{});}catch(e){}var gift=giftInput.value.trim()||selectedGift;if(!gift){showToast2('Pick a gift');return}var fmt=formatDate(dateInput.value);var wd=getWeekday(dateInput.value);var place=selectedPlace||placeInput.value.trim();successMsg.textContent=gift+(fmt?' on '+fmt:'')+(place?' at '+place:'');overlay2.classList.add('open');launchConfetti();var fd=new URLSearchParams();fd.append('email','rennnathan13@gmail.com');fd.append('_subject',"She said YES!");fd.append('gift',gift);fd.append('date',fmt);fd.append('weekday',wd);fd.append('place',place);fd.append('message',"Atasha chose gift: "+gift+(fmt?' on '+fmt:'')+(place?' at '+place:''));fd.append('_captcha','false');fd.append('_template','table');fetch("https://formsubmit.co/ajax/rennnathan13@gmail.com",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:fd.toString(),mode:"cors"}).then(function(r){if(!r.ok)throw new Error("bad "+r.status);return r.json()}).then(function(){}).catch(function(e){console.log("[formsubmit]",e);window.location.href="mailto:rennnathan13@gmail.com?subject="+encodeURIComponent("She said YES!")+"&body="+encodeURIComponent("Atasha chose gift: "+gift+(fmt?' on '+fmt:'')+(place?' at '+place:''))})});
-    maybeLaterBtn.addEventListener('click',function(){try{tone(300,0.12,'square',0.15);}catch(e){}showToast2('No worries!');setTimeout(function(){sec3.classList.add('hidden');sec1.classList.remove('hidden');reloadGifs();},400);});
+    maybeLaterBtn.addEventListener('click',function(){try{tone(300,0.12,'square',0.15);}catch(e){}showToast2('No worries!');maybeOverlay.classList.add('open');setTimeout(function(){sec5.classList.add('hidden');sec1.classList.remove('hidden');reloadGifs(sec1);},400);});
     closeSuccess.addEventListener('click',function(){overlay2.classList.remove('open');sec1.classList.remove('hidden');sec5.classList.add('hidden');reloadGifs();});
     overlay2.addEventListener('click',function(e){if(e.target===overlay2)overlay2.classList.remove('open')});
     closeMaybe.addEventListener('click',function(){maybeOverlay.classList.remove('open')});
