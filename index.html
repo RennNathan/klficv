@@ -72,15 +72,16 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
 <div class="clouds-layer" aria-hidden="true"><div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div><div class="cloud c4"></div><div class="cloud c5"></div><div class="cloud c6"></div><div class="cloud c7"></div></div>
 <div class="hearts-layer" aria-hidden="true" id="heartsLayer"></div>
 <div class="wrap">
-  <div class="gif-wrap">
-    <img src="https://media.giphy.com/media/3o7abKhOpu0NwenHRC/giphy.gif" alt="cute gif" id="topGif">
-  </div>
+  <img src="assets/nervous.gif" alt="nervous" id="mainGif" style="max-width:280px;width:min(280px,80vw);display:block;margin:0 auto 18px;image-rendering:auto;border:3px solid #1b1030;box-shadow:2px 2px 0 #1b1030">
   <h1>Do you actually like me?</h1>
   <p class="subtitle">No pressure -- your answer is safe with me</p>
+  <img src="assets/plead.gif" id="pleadGif" style="width:80px;display:block;margin:14px auto 6px;mix-blend-mode:lighten;pointer-events:none">
   <div class="actions">
     <button id="yesBtn" class="btn" type="button" aria-label="Yes">Yes</button>
     <button id="noBtn" class="btn" type="button" aria-label="No">No</button>
   </div>
+  <img src="assets/beg-crying.gif" id="begGif" style="width:120px;display:block;margin:14px auto 0;border:3px solid #1b1030;box-shadow:2px 2px 0 #1b1030">
+  <div id="carousel" style="width:min(280px,90vw);margin:14px auto 0;text-align:center"><img id="photoSwitch" src="assets/p1.webp" style="width:min(280px,90vw);height:180px;object-fit:cover;border:3px solid #1b1030;display:block;margin:0 auto;image-rendering:auto"><div id="counter" style="font-family:var(--font-pixel);font-size:10px;margin-top:4px;color:#4a3d6b">1 / 8</div><div style="display:flex;gap:8px;justify-content:center;margin-top:4px"><button id="prevBtn" style="font-family:var(--font-pixel);font-size:10px;padding:4px 8px">←</button><button id="nextBtn" style="font-family:var(--font-pixel);font-size:10px;padding:4px 8px">→</button></div></div>
 </div>
 <div id="overlay" class="overlay" role="dialog" aria-modal="true" aria-label="Success">
   <div class="overlay-card">
@@ -91,6 +92,7 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
     <button id="closeOverlay" class="btn" type="button" aria-label="Continue to next page" style="background:var(--primary);color:var(--primary-text);">Continue -></button>
   </div>
 </div>
+<img id="catJump" src="assets/cat-jump.gif" style="display:none;position:fixed;right:6vw;bottom:8vh;width:140px;z-index:101;pointer-events:none;mix-blend-mode:lighten;image-rendering:auto">
 <canvas id="confettiCanvas"></canvas>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <script>
@@ -155,8 +157,9 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
     }
     if(confettiRAF)cancelAnimationFrame(confettiRAF);confettiRAF=requestAnimationFrame(frame);
   }
-  function openSuccess(){overlay.classList.add('open');launchConfetti();}
+   function openSuccess(){overlay.classList.add('open');launchConfetti();var cj=document.getElementById('catJump');if(cj){cj.style.display='block';cj.style.animation='popIn 0.5s';}}
   yesBtn.addEventListener('click',openSuccess);
+  (function(){var photoSwitch=document.getElementById('photoSwitch');var counter=document.getElementById('counter');var prevBtn=document.getElementById('prevBtn');var nextBtn=document.getElementById('nextBtn');if(!photoSwitch||!counter||!prevBtn||!nextBtn)return;var idx=0;var imgs=['assets/p1.webp','assets/p2.webp','assets/p3.webp','assets/p4.webp','assets/p5.webp','assets/p6.webp','assets/p7.webp','assets/p8.webp'];var auto=setInterval(function(){if(idx<7){idx++;update();}else{clearInterval(auto);}},3500);function update(){photoSwitch.src=imgs[idx];counter.textContent=(idx+1)+' / 8';if(idx>=7){clearInterval(auto);nextBtn.disabled=true;}}prevBtn.addEventListener('click',function(){if(idx>0){idx--;update();nextBtn.disabled=false;}});nextBtn.addEventListener('click',function(){if(idx<7){idx++;update();}if(idx>=7){clearInterval(auto);nextBtn.disabled=true;}});})();
   closeOverlay.addEventListener('click',()=>{document.body.classList.add('page-exit');setTimeout(()=>{location.href='page2.html';},450);});
   if(overlayX)overlayX.addEventListener('click',()=>overlay.classList.remove('open'));
   overlay.addEventListener('click',(e)=>{if(e.target===overlay)overlay.classList.remove('open');});
