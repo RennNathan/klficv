@@ -80,8 +80,7 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
     <button id="yesBtn" class="btn" type="button" aria-label="Yes">Yes</button>
     <button id="noBtn" class="btn" type="button" aria-label="No">No</button>
   </div>
-  <img src="assets/beg-crying.gif" id="begGif" style="width:120px;display:block;margin:14px auto 0;border:3px solid #1b1030;box-shadow:2px 2px 0 #1b1030">
-  <div id="carousel" style="width:min(280px,90vw);margin:14px auto 0;text-align:center"><img id="photoSwitch" src="assets/p1.webp" style="width:min(280px,90vw);height:180px;object-fit:cover;border:3px solid #1b1030;display:block;margin:0 auto;image-rendering:auto"><div id="counter" style="font-family:var(--font-pixel);font-size:10px;margin-top:4px;color:#4a3d6b">1 / 8</div><div style="display:flex;gap:8px;justify-content:center;margin-top:4px"><button id="prevBtn" style="font-family:var(--font-pixel);font-size:10px;padding:4px 8px">←</button><button id="nextBtn" style="font-family:var(--font-pixel);font-size:10px;padding:4px 8px">→</button></div></div>
+  <div id="belowRow" style="display:flex;gap:12px;justify-content:center;align-items:flex-start;width:min(320px,90vw);margin:14px auto 0"><div style="flex:1;display:flex;justify-content:center"><img src="assets/beg-crying.gif" id="begGif" style="width:120px;max-width:100%;border:3px solid #1b1030;box-shadow:2px 2px 0 #1b1030"></div><div style="flex:1;display:flex;flex-direction:column;align-items:center"><img id="photoSwitch" src="assets/p1.webp" style="width:120px;height:120px;object-fit:cover;border:3px solid #1b1030;display:block"><div id="counter" style="font-family:var(--font-pixel);font-size:10px;margin-top:4px;color:#4a3d6b">1 / 8</div></div></div>
 </div>
 <div id="overlay" class="overlay" role="dialog" aria-modal="true" aria-label="Success">
   <div class="overlay-card">
@@ -110,9 +109,10 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
   const heartsCount=16;
   for(let i=0;i<heartsCount;i++){const el=document.createElement('span');el.textContent=heartsChars[Math.floor(Math.random()*heartsChars.length)];const size=(16+Math.random()*12).toFixed(1);el.style.fontSize=size+'px';el.style.left=(Math.random()*100).toFixed(2)+'%';el.style.color=heartsColors[Math.floor(Math.random()*heartsColors.length)];el.style.opacity=(0.60+Math.random()*0.15).toFixed(2);const dur=(10+Math.random()*6).toFixed(2);el.style.animationDuration=dur+'s';el.style.animationDelay=(Math.random()*8).toFixed(2)+'s';const rotStart=(-18+Math.random()*10).toFixed(1)+'deg';const rotEnd=(8+Math.random()*14).toFixed(1)+'deg';el.style.setProperty('--rot-start',rotStart);el.style.setProperty('--rot-end',rotEnd);heartsLayer.appendChild(el);}
   const noTexts=["No","Are you sure?","Really sure?","Think again? \uD83E\uDD14","Are you really sure??","Maybe? \uD83D\uDC40","Maybe later?","Maybe...?","Hmm... \uD83E\uDD28","Not sure? \uD83D\uDE0F","U sure? \uD83E\uDD7A","Please? \uD83D\uDE4F","Give Yes a chance? \uD83D\uDE0A","Don't do this to me \uD83D\uDE22","Last chance! \uD83D\uDE2C","Think twice! \uD83D\uDCAD","Surely Maybe? \uD83D\uDE09","Yes is waiting... \u2764\uFE0F","Maaaaybe? \uD83E\uDD79","Okay, maybe another time..."];
-  let noIndex=0, noClickCount=0, totalSpawned=0;
+   let noIndex=0, noClickCount=0, totalSpawned=0;
   const spawnedPositions=[];
   const yesTexts=["Yes","Yes \u2764\uFE0F","Yes!!","Of course!","Absolutely","Yesss!","Sure!","Yess!! \u2764\uFE0F","Definitely!","Yes yes!","Okay! \u2764\uFE0F","Yup!"];
+  let photoIdx=0;const photoImgs=['assets/p1.webp','assets/p2.webp','assets/p3.webp','assets/p4.webp','assets/p5.webp','assets/p6.webp','assets/p7.webp','assets/p8.webp'];
   function showToast(msg){toast.textContent=msg;toast.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(()=>toast.classList.remove('show'),1800);}
   function getNoText(idx){return noTexts[idx%noTexts.length];}
   noBtn.addEventListener('click',function(e){
@@ -138,6 +138,7 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
       btn.addEventListener('click',openSuccess);document.body.appendChild(btn);
     }
     noClickCount++;noBtn.style.transition='transform .08s steps(2)';noBtn.style.transform='scale(0.95)';setTimeout(()=>{noBtn.style.transform='';},150);
+    if(photoIdx<7){photoIdx++;var ps=document.getElementById('photoSwitch');var ct=document.getElementById('counter');if(ps)ps.src=photoImgs[photoIdx];if(ct)ct.textContent=(photoIdx+1)+' / 8';}
   });
   noBtn.addEventListener('touchstart',function(){noBtn.classList.remove('wobble');void noBtn.offsetWidth;noBtn.classList.add('wobble');setTimeout(()=>noBtn.classList.remove('wobble'),500);},{passive:true});
   let confettiRAF=null,particles=[];
@@ -159,7 +160,6 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
   }
    function openSuccess(){overlay.classList.add('open');launchConfetti();var cj=document.getElementById('catJump');if(cj){cj.style.display='block';cj.style.animation='popIn 0.5s';}}
   yesBtn.addEventListener('click',openSuccess);
-  (function(){var photoSwitch=document.getElementById('photoSwitch');var counter=document.getElementById('counter');var prevBtn=document.getElementById('prevBtn');var nextBtn=document.getElementById('nextBtn');if(!photoSwitch||!counter||!prevBtn||!nextBtn)return;var idx=0;var imgs=['assets/p1.webp','assets/p2.webp','assets/p3.webp','assets/p4.webp','assets/p5.webp','assets/p6.webp','assets/p7.webp','assets/p8.webp'];var auto=setInterval(function(){if(idx<7){idx++;update();}else{clearInterval(auto);}},3500);function update(){photoSwitch.src=imgs[idx];counter.textContent=(idx+1)+' / 8';if(idx>=7){clearInterval(auto);nextBtn.disabled=true;}}prevBtn.addEventListener('click',function(){if(idx>0){idx--;update();nextBtn.disabled=false;}});nextBtn.addEventListener('click',function(){if(idx<7){idx++;update();}if(idx>=7){clearInterval(auto);nextBtn.disabled=true;}});})();
   closeOverlay.addEventListener('click',()=>{document.body.classList.add('page-exit');setTimeout(()=>{location.href='page2.html';},450);});
   if(overlayX)overlayX.addEventListener('click',()=>overlay.classList.remove('open'));
   overlay.addEventListener('click',(e)=>{if(e.target===overlay)overlay.classList.remove('open');});
