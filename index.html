@@ -62,7 +62,7 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
 .date-field{width:100%;display:flex;flex-direction:column;gap:8px;align-items:center}
 #dateInput{width:min(280px,90vw);margin:16px 0 14px;height:44px;border:3px solid #1a1330;background:#fff;color:var(--text);font-family:'Silkscreen',monospace;font-size:10px;text-align:center;outline:none;-webkit-appearance:none;appearance:none;padding:8px 10px}
 #dateInput:focus{border:2px dashed #8a7dff;box-shadow:3px 3px 0 #2a2050}
-.selected-display{font-family:'Silkscreen',monospace;font-size:12px;line-height:1.5;color:var(--text);background:#e8e9ff;border:3px solid #1a1330;box-shadow:3px 3px 0 #2a2050;padding:7px 10px;width:100%;word-break:break-word}
+.selected-display{font-family:'Silkscreen',monospace;font-size:12px;line-height:1.5;color:#1b1030;background:#e8e9ff;border:3px solid #1a1330;box-shadow:3px 3px 0 #2a2050;padding:7px 10px;width:100%;max-width:min(280px,90vw);word-break:break-word}
 .overlay{position:fixed;inset:0;background:rgba(14,10,31,0.78);display:flex;align-items:center;justify-content:center;padding:20px 12px;opacity:0;pointer-events:none;transition:opacity .2s steps(4);z-index:100}
 .overlay.open{opacity:1;pointer-events:auto}
 .overlay-card{background:#fff;border:4px solid #1a1330;box-shadow:8px 8px 0 #2a2050,12px 12px 0 rgba(0,0,0,0.2);padding:24px 18px;max-width:400px;width:100%;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px;transform:translateY(6px);transition:transform .2s steps(4);color:var(--text)}
@@ -212,6 +212,7 @@ return tryPlay;}const bgTryPlay=initBg();
     launchConfetti();
     document.querySelectorAll('.cloud').forEach(function(c){var r=c.getBoundingClientRect();var isLeft=r.left+r.width/2 < window.innerWidth/2;c.style.animation='none';c.classList.add('cloud-exit');c.style.transition='transform 0.6s ease-in';void c.offsetWidth;c.style.transform=isLeft?'translateX(-120vw)':'translateX(120vw)';});
     setTimeout(function(){
+      document.querySelectorAll('.extra-yes').forEach(function(b){b.remove();});
       document.body.classList.add('unlocked');
       sec2.classList.remove('hidden');
       sec2.scrollIntoView({behavior:'smooth'});
@@ -257,5 +258,22 @@ return tryPlay;}const bgTryPlay=initBg();
   document.addEventListener('keydown',function(e){if(e.key==='Escape'){overlay2.classList.remove('open');maybeOverlay.classList.remove('open')}});
 })();
 </script>
+
+<div id="successOverlay" class="overlay" role="dialog" aria-modal="true" aria-label="Date confirmed">
+  <div class="overlay-card">
+    <div style="font-size:22px;line-height:1"><3</div>
+    <h2>Chat mee</h2>
+    <p id="successMsg">See you 08/31/2026</p>
+    <button id="closeSuccess" class="btn btn-primary" type="button" aria-label="Close confirmation" style="max-width:200px;">Yay!</button>
+  </div>
+</div>
+<div id="overlayMaybe" class="overlay" role="dialog" aria-modal="true" aria-label="Thank you">
+  <div class="overlay-card">
+    <div style="font-size:22px;line-height:1">[<3]</div>
+    <h2>Thank you</h2>
+    <p>Please text me when you're free I will be waiting</p>
+    <button id="closeMaybe" class="btn btn-primary" type="button" aria-label="Close" style="max-width:200px;">Okay</button>
+  </div>
+</div>
 </body>
 </html>
