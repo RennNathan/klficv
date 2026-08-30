@@ -10,17 +10,19 @@
 *{box-sizing:border-box;margin:0;padding:0;image-rendering:pixelated}
 html{-webkit-tap-highlight-color:transparent}
 body{min-height:100dvh;display:flex;align-items:flex-start;justify-content:center;background:linear-gradient(180deg,#1b1030 0%,#0e0a1f 55%,#070612 100%);background-color:var(--bg);font-family:'Silkscreen',monospace;font-size:clamp(14px,4vw,16px);line-height:1.6;color:#fff;padding:0 12px calc(20px + env(safe-area-inset-bottom));position:relative;overflow-x:hidden}
+.gif{image-rendering:auto !important;transform:none !important;will-change:auto !important;contain:none !important;filter:none !important;mix-blend-mode:normal !important}
 .clouds-layer{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
 @keyframes cloudInLeft{from{transform:translateX(-120vw);opacity:0}to{transform:translateX(0);opacity:1}}
 @keyframes cloudInRight{from{transform:translateX(120vw);opacity:0}to{transform:translateX(0);opacity:1}}
-.cloud{position:absolute;background:#fff;will-change:transform;opacity:0;transform:translateX(-120vw)}
+.cloud{position:absolute;background:#fff;will-change:transform;opacity:0;transform:translateZ(0) translateX(-120vw)}
 .cloud:nth-child(odd){animation:cloudInLeft 0.65s 0.1s ease-out forwards}
 .cloud:nth-child(even){animation:cloudInRight 0.65s 0.1s ease-out forwards}
 .c1,.c2,.c3,.c7{animation-name:cloudInLeft}
 .c4,.c5,.c6{animation-name:cloudInRight;transform:translateX(120vw)}
 .cloud.cloud-enter{transform:translateX(0);opacity:1}
 .cloud.cloud-exit{animation:none !important;transition:transform 0.6s ease-in;will-change:transform}
-.wrap.content-exit{opacity:0;transform:translateY(14px);transition:opacity 0.45s ease,transform 0.45s ease}
+.content-exit{opacity:0;transform:translateY(12px);transition:opacity 0.45s ease,transform 0.45s ease}
+.wrap.content-exit{opacity:0;transform:translateY(12px);transition:opacity 0.45s ease,transform 0.45s ease}
 .c1{left:-2%;top:22px;width:28px;height:20px;box-shadow:28px 0 #fff,56px 0 #fff,14px -14px #fff,42px -14px #fff,0 20px #fff,28px 20px #fff,56px 20px #fff,84px 14px #fff,14px 40px #ddd0ff,42px 40px #ddd0ff,70px 40px #ddd0ff}
 .c2{left:18%;top:68px;width:36px;height:24px;box-shadow:36px 0 #fff,72px 0 #fff,18px -14px #fff,54px -14px #fff,0 24px #fff,36px 24px #fff,72px 24px #fff,108px 14px #fff,18px 48px #ddd0ff,54px 48px #ddd0ff,90px 48px #ddd0ff}
 .c3{left:38%;top:18px;width:44px;height:28px;box-shadow:44px 0 #fff,88px 0 #fff,22px -16px #fff,66px -16px #fff,0 28px #fff,44px 28px #fff,88px 28px #fff,132px 16px #fff,22px 56px #ddd0ff,66px 56px #ddd0ff,110px 56px #ddd0ff}
@@ -28,8 +30,8 @@ body{min-height:100dvh;display:flex;align-items:flex-start;justify-content:cente
 .c5{left:78%;top:88px;width:60px;height:36px;box-shadow:60px 0 #fff,120px 0 #fff,30px -18px #fff,90px -18px #fff,0 36px #fff,60px 36px #fff,120px 36px #fff,180px 20px #fff,30px 72px #ddd0ff,90px 72px #ddd0ff,150px 72px #ddd0ff}
 .c6{left:8%;top:108px;width:32px;height:22px;box-shadow:32px 0 #fff,64px 0 #fff,16px -12px #fff,48px -12px #fff,0 22px #fff,32px 22px #fff,64px 22px #fff,96px 14px #fff,16px 44px #ddd0ff,48px 44px #ddd0ff,80px 44px #ddd0ff}
 .c7{left:50%;top:96px;width:72px;height:40px;box-shadow:72px 0 #fff,144px 0 #fff,36px -20px #fff,108px -20px #fff,0 40px #fff,72px 40px #fff,144px 40px #fff,216px 22px #fff,36px 80px #ddd0ff,108px 80px #ddd0ff,180px 80px #ddd0ff}
-.hearts-layer{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden;contain:layout}
-.hearts-layer span{position:absolute;bottom:-20px;animation:floatUp linear infinite;will-change:transform,opacity;user-select:none;line-height:1}
+.hearts-layer{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.hearts-layer span{position:absolute;bottom:-20px;animation:floatUp linear infinite;user-select:none;line-height:1}
 @keyframes floatUp{0%{transform:translateY(0) rotate(var(--rot-start));opacity:0}12%{opacity:var(--heart-opa,0.6)}88%{opacity:var(--heart-opa,0.6)}100%{transform:translateY(-115vh) rotate(var(--rot-end));opacity:0}}
 .wrap{width:100%;max-width:420px;display:flex;flex-direction:column;align-items:center;gap:14px;position:relative;z-index:2;padding-top:calc(28px + env(safe-area-inset-top));text-align:center;opacity:0;transform:translateY(14px)}
 .wrap.page-in{animation:pageIn 0.45s ease forwards}
@@ -69,13 +71,13 @@ h1{font-family:'Silkscreen',monospace;font-size:clamp(18px,5.5vw,24px);line-heig
 <div class="clouds-layer" aria-hidden="true"><div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div><div class="cloud c4"></div><div class="cloud c5"></div><div class="cloud c6"></div><div class="cloud c7"></div></div>
 <div class="hearts-layer" aria-hidden="true" id="heartsLayer"></div>
 <div class="wrap" id="wrap">
-<img src="assets/cat-jump.gif" id="mainGif" style="max-width:280px;width:min(280px,80vw);display:block;margin:0 auto 18px;border:3px solid #1b1030;box-shadow:2px 2px 0 #1b1030" alt="nervous">
+<img src="assets/cat-jump.gif" id="mainGif" class="gif" loading="eager" decoding="async" style="max-width:280px;width:min(280px,80vw);display:block;margin:0 auto 18px;border:3px solid #1b1030;box-shadow:2px 2px 0 #1b1030;image-rendering:auto" alt="nervous">
 <h1>Pick a day, libre ko pramis</h1>
 <div class="date-field">
 <input type="date" id="dateInput" value="2026-08-31" aria-label="Pick a date">
 <div class="selected-display" id="selectedDisplay">Selected: 08/31/2026 — Monday</div>
 </div>
-<img id="pleadGif" src="assets/huu.gif" style="width:80px;display:block;margin:0 auto;mix-blend-mode:lighten;pointer-events:none" alt="plead">
+<img id="pleadGif" src="assets/huu.gif" class="gif" loading="eager" decoding="async" style="width:80px;display:block;margin:0 auto;pointer-events:none;image-rendering:auto" alt="plead">
 <div class="actions">
 <button id="confirmBtn" class="btn btn-primary" type="button" aria-label="Confirm date">Confirm date</button>
 <button id="maybeLaterBtn" class="btn btn-secondary" type="button" aria-label="Maybe later">Maybe later</button>
