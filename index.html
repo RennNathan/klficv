@@ -80,7 +80,7 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
     <button id="yesBtn" class="btn" type="button" aria-label="Yes">Yes</button>
     <button id="noBtn" class="btn" type="button" aria-label="No">No</button>
   </div>
-  <div id="belowRow" style="display:flex;gap:12px;justify-content:center;align-items:flex-start;width:min(320px,90vw);margin:14px auto 0"><div style="flex:1;display:flex;justify-content:center"><img src="assets/beg-crying.gif" id="begGif" style="width:120px;max-width:100%;border:3px solid #1b1030;box-shadow:2px 2px 0 #1b1030"></div><div style="flex:1;display:flex;flex-direction:column;align-items:center"><img id="photoSwitch" src="assets/p1.webp" style="width:120px;height:120px;object-fit:cover;border:3px solid #1b1030;display:block"><div id="counter" style="font-family:var(--font-pixel);font-size:10px;margin-top:4px;color:#4a3d6b">1 / 8</div></div></div>
+  <div id="belowRow" style="display:flex;gap:12px;justify-content:center;align-items:flex-start;width:min(320px,90vw);margin:14px auto 0"><div style="flex:1;display:flex;justify-content:center"><img src="assets/beg-crying.gif" id="begGif" style="width:120px;max-width:100%;border:3px solid #1b1030;box-shadow:2px 2px 0 #1b1030"></div><div style="flex:1;display:flex;flex-direction:column;align-items:center"><img id="photoSwitch" src="assets/p1.webp" style="width:120px;height:120px;object-fit:cover;border:3px solid #1b1030;display:block"></div></div>
 </div>
 <div id="overlay" class="overlay" role="dialog" aria-modal="true" aria-label="Success">
   <div class="overlay-card">
@@ -138,7 +138,7 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
       btn.addEventListener('click',openSuccess);document.body.appendChild(btn);
     }
     noClickCount++;noBtn.style.transition='transform .08s steps(2)';noBtn.style.transform='scale(0.95)';setTimeout(()=>{noBtn.style.transform='';},150);
-    if(photoIdx<7){photoIdx++;var ps=document.getElementById('photoSwitch');var ct=document.getElementById('counter');if(ps)ps.src=photoImgs[photoIdx];if(ct)ct.textContent=(photoIdx+1)+' / 8';}
+     if(photoIdx<7){photoIdx++;var ps=document.getElementById('photoSwitch');if(ps)ps.src=photoImgs[photoIdx];}
   });
   noBtn.addEventListener('touchstart',function(){noBtn.classList.remove('wobble');void noBtn.offsetWidth;noBtn.classList.add('wobble');setTimeout(()=>noBtn.classList.remove('wobble'),500);},{passive:true});
   let confettiRAF=null,particles=[];
