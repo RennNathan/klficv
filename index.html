@@ -113,7 +113,7 @@ h1{font-size:clamp(18px,5.5vw,24px);font-weight:400;line-height:1.4;letter-spaci
    const yesTexts=["Yada","Yup","Yis","Yes","Absutuliti"];
   let photoIdx=0;const photoImgs=['assets/p1.webp','assets/p2.webp','assets/p3.webp','assets/p4.webp','assets/p5.webp','assets/p6.webp','assets/p7.webp','assets/p8.webp'];
   function showToast(msg){toast.textContent=msg;toast.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(()=>toast.classList.remove('show'),1800);}
-  function getNoText(idx){return noTexts[idx%noTexts.length];}
+   function getNoText(idx){return noTexts[Math.min(idx,noTexts.length-1)];}
   noBtn.addEventListener('click',function(e){
     e.preventDefault();noIndex++;const nextText=getNoText(noIndex);noBtn.textContent=nextText;showToast(nextText);
     const vw=window.innerWidth,vh=window.innerHeight;
